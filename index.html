@@ -8,13 +8,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        /* CSS para estilizar a página */
+        /* CSS para estilizar a página com as cores do logo */
         :root {
-            --primary-color: #4CAF50; /* Verde principal */
-            --secondary-color: #8BC34A; /* Verde mais claro */
+            --primary-color: #2E592D; /* Verde escuro do logo */
+            --secondary-color: #5a8a59; /* Verde mais claro para hover */
             --dark-text: #333;
             --light-text: #666;
-            --background-color: #F8F9FA;
+            --background-color: #FDFBF5; /* Fundo creme do logo */
             --white-color: #FFFFFF;
             --border-color: #E0E0E0;
         }
@@ -48,7 +48,7 @@
 
         header h1 {
             color: var(--primary-color);
-            margin: 0;
+            margin: 0 0 10px 0;
             font-size: 2.8em;
             font-weight: 700;
         }
@@ -61,6 +61,12 @@
 
         .secao-opcoes {
             margin-bottom: 30px;
+            transition: opacity 0.3s ease;
+        }
+        
+        .secao-opcoes.desativado {
+            opacity: 0.5;
+            pointer-events: none;
         }
 
         .secao-opcoes h2 {
@@ -91,6 +97,10 @@
             grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 15px;
         }
+        
+        .opcoes-grid.duas-colunas {
+            grid-template-columns: 1fr 1fr;
+        }
 
         .opcao {
             border: 2px solid var(--border-color);
@@ -109,7 +119,7 @@
         }
 
         .opcao.selecionado {
-            background-color: #E8F5E9; /* Verde bem clarinho */
+            background-color: #eaf1ea; /* Verde bem clarinho */
             border-color: var(--primary-color);
             color: var(--primary-color);
             font-weight: 600;
@@ -120,6 +130,12 @@
             font-size: 1.05em;
             margin-bottom: 5px;
             font-weight: 600;
+        }
+        
+        .opcao .descricao {
+            font-size: 0.8em;
+            color: var(--light-text);
+            margin-bottom: 5px;
         }
 
         .opcao .preco {
@@ -172,7 +188,7 @@
             color: var(--primary-color);
         }
 
-        input[type="text"] {
+        input[type="text"], textarea {
             width: 100%;
             padding: 14px;
             border: 2px solid var(--border-color);
@@ -184,9 +200,18 @@
             transition: border-color 0.2s;
         }
         
-        input[type="text"]:focus {
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        input[type="text"]:focus, textarea:focus {
             outline: none;
             border-color: var(--primary-color);
+        }
+        
+        #campo-endereco {
+            transition: all 0.3s ease;
         }
 
         .botao-finalizar {
@@ -233,103 +258,131 @@
             <p>Monte sua salada do seu jeito: fresca, saudável e deliciosa!</p>
         </header>
 
-        <!-- Seção Folhas -->
+        <!-- Seção Saladas Prontas -->
         <div class="secao-opcoes">
-            <h2><span class="numero-passo">1</span>Escolha a Base</h2>
-            <div class="opcoes-grid" id="folhas">
-                <div class="opcao" data-nome="Alface Americana" data-preco="8.00">
-                    <div class="nome">Alface Americana</div>
-                    <div class="preco">R$ 8,00</div>
+            <h2><span class="numero-passo">⭐</span>Escolha uma Salada Pronta</h2>
+            <div class="opcoes-grid" id="saladas-prontas">
+                <div class="opcao" data-nome="Caesar com Frango" data-preco="25.00" data-descricao="Alface americana, frango grelhado, croutons, queijo parmesão e molho caesar.">
+                    <div class="nome">Caesar c/ Frango</div>
+                    <div class="descricao">Frango, croutons, parmesão</div>
+                    <div class="preco">R$ 25,00</div>
                 </div>
-                <div class="opcao" data-nome="Mix de Folhas" data-preco="9.00">
-                    <div class="nome">Mix de Folhas</div>
-                    <div class="preco">R$ 9,00</div>
-                </div>
-                <div class="opcao" data-nome="Rúcula com Agrião" data-preco="8.50">
-                    <div class="nome">Rúcula c/ Agrião</div>
-                    <div class="preco">R$ 8,50</div>
+                <div class="opcao" data-nome="Salada Fit" data-preco="23.00" data-descricao="Mix de folhas, tiras de carne, tomate cereja e molho italiano.">
+                    <div class="nome">Salada Fit</div>
+                    <div class="descricao">Carne, tomate cereja</div>
+                    <div class="preco">R$ 23,00</div>
                 </div>
             </div>
         </div>
 
-        <!-- Seção Proteínas -->
+        <!-- Seção Monte a Sua -->
+        <div id="monte-sua-salada">
+            <div class="secao-opcoes">
+                <h2><span class="numero-passo">1</span>Ou Monte a Sua: A Base</h2>
+                <div class="opcoes-grid" id="folhas">
+                    <div class="opcao" data-nome="Alface Americana" data-preco="8.00">
+                        <div class="nome">Alface Americana</div>
+                        <div class="preco">R$ 8,00</div>
+                    </div>
+                    <div class="opcao" data-nome="Mix de Folhas" data-preco="9.00">
+                        <div class="nome">Mix de Folhas</div>
+                        <div class="preco">R$ 9,00</div>
+                    </div>
+                    <div class="opcao" data-nome="Rúcula com Agrião" data-preco="8.50">
+                        <div class="nome">Rúcula c/ Agrião</div>
+                        <div class="preco">R$ 8,50</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="secao-opcoes">
+                <h2><span class="numero-passo">2</span>Escolha uma Proteína</h2>
+                <div class="opcoes-grid" id="proteinas">
+                    <div class="opcao" data-nome="Frango Grelhado" data-preco="10.00">
+                        <div class="nome">Frango Grelhado</div>
+                        <div class="preco">R$ 10,00</div>
+                    </div>
+                    <div class="opcao" data-nome="Tiras de Carne" data-preco="12.00">
+                        <div class="nome">Tiras de Carne</div>
+                        <div class="preco">R$ 12,00</div>
+                    </div>
+                    <div class="opcao" data-nome="Ovo de Codorna" data-preco="7.00">
+                        <div class="nome">Ovo de Codorna</div>
+                        <div class="preco">R$ 7,00</div>
+                    </div>
+                    <div class="opcao" data-nome="Grão de Bico" data-preco="8.00">
+                        <div class="nome">Grão de Bico</div>
+                        <div class="preco">R$ 8,00</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="secao-opcoes">
+                <h2><span class="numero-passo">3</span>Escolha o Molho</h2>
+                <div class="opcoes-grid" id="molhos">
+                    <div class="opcao" data-nome="Mostarda e Mel" data-preco="4.00">
+                        <div class="nome">Mostarda e Mel</div>
+                        <div class="preco">R$ 4,00</div>
+                    </div>
+                    <div class="opcao" data-nome="Caesar" data-preco="4.50">
+                        <div class="nome">Caesar</div>
+                        <div class="preco">R$ 4,50</div>
+                    </div>
+                    <div class="opcao" data-nome="Italiano" data-preco="4.00">
+                        <div class="nome">Italiano</div>
+                        <div class="preco">R$ 4,00</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="secao-opcoes">
+                <h2><span class="numero-passo">4</span>Adicione Extras (Opcional)</h2>
+                <div class="opcoes-grid" id="extras">
+                    <div class="opcao" data-nome="Croutons" data-preco="2.50">
+                        <div class="nome">Croutons</div>
+                        <div class="preco">+ R$ 2,50</div>
+                    </div>
+                    <div class="opcao" data-nome="Bacon Bits" data-preco="3.50">
+                        <div class="nome">Bacon Bits</div>
+                        <div class="preco">+ R$ 3,50</div>
+                    </div>
+                    <div class="opcao" data-nome="Queijo Parmesão" data-preco="4.00">
+                        <div class="nome">Queijo Parmesão</div>
+                        <div class="preco">+ R$ 4,00</div>
+                    </div>
+                    <div class="opcao" data-nome="Tomate Cereja" data-preco="3.00">
+                        <div class="nome">Tomate Cereja</div>
+                        <div class="preco">+ R$ 3,00</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção Entrega/Retirada -->
         <div class="secao-opcoes">
-            <h2><span class="numero-passo">2</span>Escolha uma Proteína</h2>
-            <div class="opcoes-grid" id="proteinas">
-                <div class="opcao" data-nome="Frango Grelhado" data-preco="10.00">
-                    <div class="nome">Frango Grelhado</div>
-                    <div class="preco">R$ 10,00</div>
+            <h2><span class="numero-passo">5</span>Entrega ou Retirada?</h2>
+            <div class="opcoes-grid duas-colunas" id="metodo-entrega">
+                <div class="opcao selecionado" data-metodo="entrega">
+                    <div class="nome">🛵 Entrega</div>
                 </div>
-                <div class="opcao" data-nome="Tiras de Carne" data-preco="12.00">
-                    <div class="nome">Tiras de Carne</div>
-                    <div class="preco">R$ 12,00</div>
-                </div>
-                <div class="opcao" data-nome="Ovo de Codorna" data-preco="7.00">
-                    <div class="nome">Ovo de Codorna</div>
-                    <div class="preco">R$ 7,00</div>
-                </div>
-                 <div class="opcao" data-nome="Grão de Bico" data-preco="8.00">
-                    <div class="nome">Grão de Bico</div>
-                    <div class="preco">R$ 8,00</div>
+                <div class="opcao" data-metodo="retirada">
+                    <div class="nome">🛍️ Retirada</div>
                 </div>
             </div>
         </div>
 
-        <!-- Seção Molhos -->
-        <div class="secao-opcoes">
-            <h2><span class="numero-passo">3</span>Escolha o Molho</h2>
-            <div class="opcoes-grid" id="molhos">
-                <div class="opcao" data-nome="Mostarda e Mel" data-preco="4.00">
-                    <div class="nome">Mostarda e Mel</div>
-                    <div class="preco">R$ 4,00</div>
-                </div>
-                <div class="opcao" data-nome="Caesar" data-preco="4.50">
-                    <div class="nome">Caesar</div>
-                    <div class="preco">R$ 4,50</div>
-                </div>
-                <div class="opcao" data-nome="Italiano" data-preco="4.00">
-                    <div class="nome">Italiano</div>
-                    <div class="preco">R$ 4,00</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- NOVA Seção Extras (Múltipla Escolha) -->
-        <div class="secao-opcoes">
-            <h2><span class="numero-passo">4</span>Adicione Extras (Opcional)</h2>
-            <div class="opcoes-grid" id="extras">
-                <div class="opcao" data-nome="Croutons" data-preco="2.50">
-                    <div class="nome">Croutons</div>
-                    <div class="preco">+ R$ 2,50</div>
-                </div>
-                <div class="opcao" data-nome="Bacon Bits" data-preco="3.50">
-                    <div class="nome">Bacon Bits</div>
-                    <div class="preco">+ R$ 3,50</div>
-                </div>
-                <div class="opcao" data-nome="Queijo Parmesão" data-preco="4.00">
-                    <div class="nome">Queijo Parmesão</div>
-                    <div class="preco">+ R$ 4,00</div>
-                </div>
-                <div class="opcao" data-nome="Tomate Cereja" data-preco="3.00">
-                    <div class="nome">Tomate Cereja</div>
-                    <div class="preco">+ R$ 3,00</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Dados do Cliente -->
         <div class="dados-cliente">
-             <h3><span class="numero-passo">5</span>Seus Dados</h3>
+             <h3><span class="numero-passo">✓</span>Seus Dados</h3>
              <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
-             <input type="text" id="endereco-cliente" placeholder="Seu endereço para entrega" required>
+             <div id="campo-endereco">
+                <input type="text" id="endereco-cliente" placeholder="Seu endereço para entrega" required>
+             </div>
+             <textarea id="observacoes" placeholder="Observações do pedido (ex: sem cebola, ponto da carne, etc)"></textarea>
         </div>
 
-        <!-- Resumo do Pedido -->
         <div class="resumo-pedido">
             <h3>🛒 Resumo do seu Pedido</h3>
-            <ul id="lista-resumo">
-                <!-- Itens selecionados aparecerão aqui -->
-            </ul>
+            <ul id="lista-resumo"></ul>
             <div id="total-pedido">Total: R$ 0,00</div>
         </div>
         
@@ -342,35 +395,79 @@
     </div>
 
     <script>
+        const TAXA_ENTREGA = 7.00; // Define a taxa de entrega aqui
+
         const pedido = {
+            saladaPronta: null,
             folha: null,
             proteina: null,
             molho: null,
-            extras: [] // Array para guardar múltiplos extras
+            extras: [],
+            metodoEntrega: 'entrega' // Valor padrão
         };
 
         const precos = {
+            saladaPronta: 0,
             folha: 0,
             proteina: 0,
             molho: 0,
         };
         
         const mensagemErroEl = document.getElementById('mensagem-erro');
+        const secaoMonteSuaSalada = document.getElementById('monte-sua-salada');
+        const campoEnderecoEl = document.getElementById('campo-endereco');
 
-        // Função para opções de escolha única
+        function limparSelecaoMonteSua() {
+            secaoMonteSuaSalada.querySelectorAll('.opcao.selecionado').forEach(el => el.classList.remove('selecionado'));
+            pedido.folha = null;
+            pedido.proteina = null;
+            pedido.molho = null;
+            pedido.extras = [];
+            precos.folha = 0;
+            precos.proteina = 0;
+            precos.molho = 0;
+        }
+
+        function limparSelecaoPronta() {
+            document.querySelectorAll('#saladas-prontas .opcao.selecionado').forEach(el => el.classList.remove('selecionado'));
+            pedido.saladaPronta = null;
+            precos.saladaPronta = 0;
+        }
+
+        function selecionarSaladaPronta(elemento) {
+            limparSelecaoMonteSua();
+            secaoMonteSuaSalada.classList.add('desativado');
+
+            const grupo = document.getElementById('saladas-prontas');
+            grupo.querySelectorAll('.opcao').forEach(opt => opt.classList.remove('selecionado'));
+            elemento.classList.add('selecionado');
+            
+            pedido.saladaPronta = {
+                nome: elemento.dataset.nome,
+                descricao: elemento.dataset.descricao
+            };
+            precos.saladaPronta = parseFloat(elemento.dataset.preco);
+            atualizarResumo();
+        }
+
         function selecionarOpcaoUnica(tipo, elemento) {
+            limparSelecaoPronta();
+            secaoMonteSuaSalada.classList.remove('desativado');
+
             const grupo = document.getElementById(tipo);
             grupo.querySelectorAll('.opcao').forEach(opt => opt.classList.remove('selecionado'));
             elemento.classList.add('selecionado');
             
-            pedido[tipo] = elemento.dataset.nome;
-            precos[tipo] = parseFloat(elemento.dataset.preco);
-
+            const tipoSingular = tipo.slice(0, -1);
+            pedido[tipoSingular] = elemento.dataset.nome;
+            precos[tipoSingular] = parseFloat(elemento.dataset.preco);
             atualizarResumo();
         }
         
-        // Função para opções de múltipla escolha (Extras)
         function selecionarExtra(elemento) {
+            limparSelecaoPronta();
+            secaoMonteSuaSalada.classList.remove('desativado');
+
             const nome = elemento.dataset.nome;
             const preco = parseFloat(elemento.dataset.preco);
 
@@ -378,101 +475,153 @@
             const index = pedido.extras.findIndex(extra => extra.nome === nome);
 
             if (index > -1) {
-                // Se já estiver selecionado, remove do array
                 pedido.extras.splice(index, 1);
             } else {
-                // Se não estiver, adiciona no array
                 pedido.extras.push({ nome, preco });
             }
             atualizarResumo();
+        }
+        
+        function selecionarMetodoEntrega(elemento) {
+            const metodo = elemento.dataset.metodo;
+            pedido.metodoEntrega = metodo;
+
+            document.querySelectorAll('#metodo-entrega .opcao').forEach(opt => opt.classList.remove('selecionado'));
+            elemento.classList.add('selecionado');
+
+            if (metodo === 'retirada') {
+                campoEnderecoEl.style.display = 'none';
+            } else {
+                campoEnderecoEl.style.display = 'block';
+            }
+            atualizarResumo(); // Atualiza o resumo para adicionar/remover a taxa
         }
         
         function atualizarResumo() {
             const listaResumo = document.getElementById('lista-resumo');
             listaResumo.innerHTML = '';
             let total = 0;
-
             const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-            if (pedido.folha) {
-                listaResumo.innerHTML += `<li><span>Base: ${pedido.folha}</span> <span>${formatarMoeda(precos.folha)}</span></li>`;
-                total += precos.folha;
-            }
-            if (pedido.proteina) {
-                listaResumo.innerHTML += `<li><span>Proteína: ${pedido.proteina}</span> <span>${formatarMoeda(precos.proteina)}</span></li>`;
-                total += precos.proteina;
-            }
-            if (pedido.molho) {
-                listaResumo.innerHTML += `<li><span>Molho: ${pedido.molho}</span> <span>${formatarMoeda(precos.molho)}</span></li>`;
-                total += precos.molho;
-            }
-            if (pedido.extras.length > 0) {
-                pedido.extras.forEach(extra => {
-                    listaResumo.innerHTML += `<li><span>Extra: ${extra.nome}</span> <span>${formatarMoeda(extra.preco)}</span></li>`;
-                    total += extra.preco;
-                });
+            if (pedido.saladaPronta) {
+                listaResumo.innerHTML += `<li><span>${pedido.saladaPronta.nome}</span> <span>${formatarMoeda(precos.saladaPronta)}</span></li>`;
+                total = precos.saladaPronta;
+            } else {
+                if (pedido.folha) {
+                    listaResumo.innerHTML += `<li><span>Base: ${pedido.folha}</span> <span>${formatarMoeda(precos.folha)}</span></li>`;
+                    total += precos.folha;
+                }
+                if (pedido.proteina) {
+                    listaResumo.innerHTML += `<li><span>Proteína: ${pedido.proteina}</span> <span>${formatarMoeda(precos.proteina)}</span></li>`;
+                    total += precos.proteina;
+                }
+                if (pedido.molho) {
+                    listaResumo.innerHTML += `<li><span>Molho: ${pedido.molho}</span> <span>${formatarMoeda(precos.molho)}</span></li>`;
+                    total += precos.molho;
+                }
+                if (pedido.extras.length > 0) {
+                    pedido.extras.forEach(extra => {
+                        listaResumo.innerHTML += `<li><span>Extra: ${extra.nome}</span> <span>${formatarMoeda(extra.preco)}</span></li>`;
+                        total += extra.preco;
+                    });
+                }
             }
             
+            // Adiciona a taxa de entrega se o método for 'entrega'
+            if (pedido.metodoEntrega === 'entrega') {
+                listaResumo.innerHTML += `<li><span>Taxa de Entrega</span> <span>${formatarMoeda(TAXA_ENTREGA)}</span></li>`;
+                total += TAXA_ENTREGA;
+            }
+
             document.getElementById('total-pedido').innerText = `Total: ${formatarMoeda(total)}`;
         }
 
         function enviarPedido() {
             const nomeCliente = document.getElementById('nome-cliente').value;
             const enderecoCliente = document.getElementById('endereco-cliente').value;
-            
+            const observacoes = document.getElementById('observacoes').value;
             mensagemErroEl.style.display = 'none';
 
-            if (!pedido.folha || !pedido.proteina || !pedido.molho) {
-                mensagemErroEl.innerText = 'Por favor, selecione a base, a proteína e o molho!';
+            const isMonteSuaInvalido = !pedido.folha || !pedido.proteina || !pedido.molho;
+            if (!pedido.saladaPronta && isMonteSuaInvalido) {
+                mensagemErroEl.innerText = 'Por favor, escolha uma salada pronta ou monte a sua por completo!';
                 mensagemErroEl.style.display = 'block';
                 return;
             }
-            if (nomeCliente.trim() === '' || enderecoCliente.trim() === '') {
-                mensagemErroEl.innerText = 'Por favor, preencha seu nome e endereço!';
+            if (nomeCliente.trim() === '') {
+                mensagemErroEl.innerText = 'Por favor, preencha seu nome!';
+                mensagemErroEl.style.display = 'block';
+                return;
+            }
+            if (pedido.metodoEntrega === 'entrega' && enderecoCliente.trim() === '') {
+                 mensagemErroEl.innerText = 'Por favor, preencha seu endereço para entrega!';
                 mensagemErroEl.style.display = 'block';
                 return;
             }
 
-            let total = precos.folha + precos.proteina + precos.molho;
-            pedido.extras.forEach(extra => total += extra.preco);
-
+            let total = 0;
             let mensagem = `Olá, *Salada da Jeh*! 🥗\nGostaria de fazer um novo pedido:\n\n`;
             mensagem += `*Cliente:* ${nomeCliente}\n`;
-            mensagem += `*Endereço de Entrega:* ${enderecoCliente}\n\n`;
-            mensagem += `*MINHA SALADA*\n`;
-            mensagem += `----------------------\n`;
-            mensagem += `*Base:* ${pedido.folha}\n`;
-            mensagem += `*Proteína:* ${pedido.proteina}\n`;
-            mensagem += `*Molho:* ${pedido.molho}\n`;
             
-            if (pedido.extras.length > 0) {
-                mensagem += `*Extras:*\n`;
-                pedido.extras.forEach(extra => {
-                    mensagem += `  - ${extra.nome}\n`;
-                });
+            if (pedido.metodoEntrega === 'entrega') {
+                mensagem += `*Método:* Entrega 🛵\n`;
+                mensagem += `*Endereço:* ${enderecoCliente}\n\n`;
+            } else {
+                mensagem += `*Método:* Retirada no local 🛍️\n\n`;
+            }
+
+            if (pedido.saladaPronta) {
+                total = precos.saladaPronta;
+                mensagem += `*SALADA PRONTA*\n`;
+                mensagem += `----------------------\n`;
+                mensagem += `*Item:* ${pedido.saladaPronta.nome}\n`;
+                mensagem += `(${pedido.saladaPronta.descricao})\n`;
+            } else {
+                total = precos.folha + precos.proteina + precos.molho;
+                pedido.extras.forEach(extra => total += extra.preco);
+                mensagem += `*SALADA MONTADA*\n`;
+                mensagem += `----------------------\n`;
+                mensagem += `*Base:* ${pedido.folha}\n`;
+                mensagem += `*Proteína:* ${pedido.proteina}\n`;
+                mensagem += `*Molho:* ${pedido.molho}\n`;
+                if (pedido.extras.length > 0) {
+                    mensagem += `*Extras:*\n`;
+                    pedido.extras.forEach(extra => {
+                        mensagem += `  - ${extra.nome}\n`;
+                    });
+                }
+            }
+
+            if (pedido.metodoEntrega === 'entrega') {
+                total += TAXA_ENTREGA;
+            }
+            
+            if (observacoes.trim() !== '') {
+                mensagem += `\n*Observações:* ${observacoes}\n`;
             }
             
             mensagem += `----------------------\n`;
             mensagem += `*TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
             mensagem += `Aguardo a confirmação do meu pedido. Obrigado!`;
 
-            // **IMPORTANTE**: Substitua o número abaixo pelo seu número de WhatsApp
-            const numeroWhatsApp = '5535997402421'; // Formato: 55 (País) + DDD + Número
-            
+            const numeroWhatsApp = '5535000000000';
             const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
             window.open(linkWhatsApp, '_blank');
         }
 
-        // Adiciona os "escutadores" de clique
+        document.querySelectorAll('#saladas-prontas .opcao').forEach(el => {
+            el.addEventListener('click', () => selecionarSaladaPronta(el));
+        });
         document.querySelectorAll('#folhas .opcao, #proteinas .opcao, #molhos .opcao').forEach(el => {
             const tipo = el.parentElement.id;
             el.addEventListener('click', () => selecionarOpcaoUnica(tipo, el));
         });
-        
         document.querySelectorAll('#extras .opcao').forEach(el => {
             el.addEventListener('click', () => selecionarExtra(el));
         });
-
+        document.querySelectorAll('#metodo-entrega .opcao').forEach(el => {
+            el.addEventListener('click', () => selecionarMetodoEntrega(el));
+        });
     </script>
 </body>
 </html>

@@ -2,7 +2,7 @@
 const TAXA_ENTREGA = 7.00;
 const HORA_ABERTURA = 11; // 11:00
 const HORA_FECHAMENTO = 22; // 22:00
-const NUMERO_WHATSAPP = '5535000000000'; // Insira seu número aqui
+const NUMERO_WHATSAPP = '5535997402421'; // Insira seu número aqui
 
 // --- ESTADO DO PEDIDO ---
 const pedido = {

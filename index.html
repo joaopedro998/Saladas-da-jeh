@@ -215,13 +215,12 @@
             box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
         
-        /* Mensagem de erro */
         #mensagem-erro {
             color: #D32F2F;
             text-align: center;
             margin-top: 15px;
             font-weight: 600;
-            display: none; /* Começa escondido */
+            display: none;
         }
 
     </style>
@@ -236,7 +235,7 @@
 
         <!-- Seção Folhas -->
         <div class="secao-opcoes">
-            <h2><span class="numero-passo">1</span>Escolha a Base (Folha)</h2>
+            <h2><span class="numero-passo">1</span>Escolha a Base</h2>
             <div class="opcoes-grid" id="folhas">
                 <div class="opcao" data-nome="Alface Americana" data-preco="8.00">
                     <div class="nome">Alface Americana</div>
@@ -295,9 +294,32 @@
             </div>
         </div>
         
+        <!-- NOVA Seção Extras (Múltipla Escolha) -->
+        <div class="secao-opcoes">
+            <h2><span class="numero-passo">4</span>Adicione Extras (Opcional)</h2>
+            <div class="opcoes-grid" id="extras">
+                <div class="opcao" data-nome="Croutons" data-preco="2.50">
+                    <div class="nome">Croutons</div>
+                    <div class="preco">+ R$ 2,50</div>
+                </div>
+                <div class="opcao" data-nome="Bacon Bits" data-preco="3.50">
+                    <div class="nome">Bacon Bits</div>
+                    <div class="preco">+ R$ 3,50</div>
+                </div>
+                <div class="opcao" data-nome="Queijo Parmesão" data-preco="4.00">
+                    <div class="nome">Queijo Parmesão</div>
+                    <div class="preco">+ R$ 4,00</div>
+                </div>
+                <div class="opcao" data-nome="Tomate Cereja" data-preco="3.00">
+                    <div class="nome">Tomate Cereja</div>
+                    <div class="preco">+ R$ 3,00</div>
+                </div>
+            </div>
+        </div>
+        
         <!-- Dados do Cliente -->
         <div class="dados-cliente">
-             <h3><span class="numero-passo">4</span>Seus Dados</h3>
+             <h3><span class="numero-passo">5</span>Seus Dados</h3>
              <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
              <input type="text" id="endereco-cliente" placeholder="Seu endereço para entrega" required>
         </div>
@@ -320,49 +342,57 @@
     </div>
 
     <script>
-        // Objeto para guardar as escolhas do cliente
         const pedido = {
             folha: null,
             proteina: null,
-            molho: null
+            molho: null,
+            extras: [] // Array para guardar múltiplos extras
         };
 
-        // Objeto para guardar os preços dos itens escolhidos
         const precos = {
             folha: 0,
             proteina: 0,
-            molho: 0
+            molho: 0,
         };
         
         const mensagemErroEl = document.getElementById('mensagem-erro');
 
-        // Função para selecionar uma opção
-        function selecionarOpcao(tipo, elemento) {
-            // Remove a classe 'selecionado' de qualquer outra opção no mesmo grupo
+        // Função para opções de escolha única
+        function selecionarOpcaoUnica(tipo, elemento) {
             const grupo = document.getElementById(tipo);
             grupo.querySelectorAll('.opcao').forEach(opt => opt.classList.remove('selecionado'));
-
-            // Adiciona a classe 'selecionado' ao elemento clicado
             elemento.classList.add('selecionado');
             
-            // Armazena o nome do item e o preço
             pedido[tipo] = elemento.dataset.nome;
             precos[tipo] = parseFloat(elemento.dataset.preco);
 
-            // Atualiza o resumo do pedido na tela
             atualizarResumo();
         }
         
-        // Função para atualizar o resumo e o total
+        // Função para opções de múltipla escolha (Extras)
+        function selecionarExtra(elemento) {
+            const nome = elemento.dataset.nome;
+            const preco = parseFloat(elemento.dataset.preco);
+
+            elemento.classList.toggle('selecionado');
+            const index = pedido.extras.findIndex(extra => extra.nome === nome);
+
+            if (index > -1) {
+                // Se já estiver selecionado, remove do array
+                pedido.extras.splice(index, 1);
+            } else {
+                // Se não estiver, adiciona no array
+                pedido.extras.push({ nome, preco });
+            }
+            atualizarResumo();
+        }
+        
         function atualizarResumo() {
             const listaResumo = document.getElementById('lista-resumo');
-            listaResumo.innerHTML = ''; // Limpa a lista antes de adicionar os itens
+            listaResumo.innerHTML = '';
             let total = 0;
 
-            // Formata um valor para moeda brasileira (BRL)
-            const formatarMoeda = (valor) => {
-                return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-            };
+            const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
             if (pedido.folha) {
                 listaResumo.innerHTML += `<li><span>Base: ${pedido.folha}</span> <span>${formatarMoeda(precos.folha)}</span></li>`;
@@ -376,21 +406,24 @@
                 listaResumo.innerHTML += `<li><span>Molho: ${pedido.molho}</span> <span>${formatarMoeda(precos.molho)}</span></li>`;
                 total += precos.molho;
             }
+            if (pedido.extras.length > 0) {
+                pedido.extras.forEach(extra => {
+                    listaResumo.innerHTML += `<li><span>Extra: ${extra.nome}</span> <span>${formatarMoeda(extra.preco)}</span></li>`;
+                    total += extra.preco;
+                });
+            }
             
-            // Atualiza o texto do total do pedido
             document.getElementById('total-pedido').innerText = `Total: ${formatarMoeda(total)}`;
         }
 
-        // Função para finalizar o pedido e enviar para o WhatsApp
         function enviarPedido() {
             const nomeCliente = document.getElementById('nome-cliente').value;
             const enderecoCliente = document.getElementById('endereco-cliente').value;
             
-            mensagemErroEl.style.display = 'none'; // Esconde a mensagem de erro
+            mensagemErroEl.style.display = 'none';
 
-            // Validação para garantir que tudo foi preenchido
             if (!pedido.folha || !pedido.proteina || !pedido.molho) {
-                mensagemErroEl.innerText = 'Por favor, selecione uma opção de cada categoria!';
+                mensagemErroEl.innerText = 'Por favor, selecione a base, a proteína e o molho!';
                 mensagemErroEl.style.display = 'block';
                 return;
             }
@@ -401,8 +434,8 @@
             }
 
             let total = precos.folha + precos.proteina + precos.molho;
+            pedido.extras.forEach(extra => total += extra.preco);
 
-            // Monta a mensagem formatada para o WhatsApp
             let mensagem = `Olá, *Salada da Jeh*! 🥗\nGostaria de fazer um novo pedido:\n\n`;
             mensagem += `*Cliente:* ${nomeCliente}\n`;
             mensagem += `*Endereço de Entrega:* ${enderecoCliente}\n\n`;
@@ -411,6 +444,14 @@
             mensagem += `*Base:* ${pedido.folha}\n`;
             mensagem += `*Proteína:* ${pedido.proteina}\n`;
             mensagem += `*Molho:* ${pedido.molho}\n`;
+            
+            if (pedido.extras.length > 0) {
+                mensagem += `*Extras:*\n`;
+                pedido.extras.forEach(extra => {
+                    mensagem += `  - ${extra.nome}\n`;
+                });
+            }
+            
             mensagem += `----------------------\n`;
             mensagem += `*TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
             mensagem += `Aguardo a confirmação do meu pedido. Obrigado!`;
@@ -418,22 +459,18 @@
             // **IMPORTANTE**: Substitua o número abaixo pelo seu número de WhatsApp
             const numeroWhatsApp = '5535997402421'; // Formato: 55 (País) + DDD + Número
             
-            // Cria o link para o WhatsApp
             const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
-
-            // Abre o link em uma nova aba
             window.open(linkWhatsApp, '_blank');
         }
 
-        // Adiciona os "escutadores" de clique para cada opção de salada
-        document.querySelectorAll('#folhas .opcao').forEach(el => {
-            el.addEventListener('click', () => selecionarOpcao('folha', el));
+        // Adiciona os "escutadores" de clique
+        document.querySelectorAll('#folhas .opcao, #proteinas .opcao, #molhos .opcao').forEach(el => {
+            const tipo = el.parentElement.id;
+            el.addEventListener('click', () => selecionarOpcaoUnica(tipo, el));
         });
-        document.querySelectorAll('#proteinas .opcao').forEach(el => {
-            el.addEventListener('click', () => selecionarOpcao('proteina', el));
-        });
-         document.querySelectorAll('#molhos .opcao').forEach(el => {
-            el.addEventListener('click', () => selecionarOpcao('molho', el));
+        
+        document.querySelectorAll('#extras .opcao').forEach(el => {
+            el.addEventListener('click', () => selecionarExtra(el));
         });
 
     </script>

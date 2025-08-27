@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salada da Jeh - Monte a Sua!</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS para estilizar a página */
+        :root {
+            --primary-color: #4CAF50; /* Verde principal */
+            --secondary-color: #8BC34A; /* Verde mais claro */
+            --dark-text: #333;
+            --light-text: #666;
+            --background-color: #F8F9FA;
+            --white-color: #FFFFFF;
+            --border-color: #E0E0E0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--background-color);
+            color: var(--dark-text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--white-color);
+            padding: 25px 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 650px;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            margin: 0;
+            font-size: 2.8em;
+            font-weight: 700;
+        }
+
+        header p {
+            color: var(--light-text);
+            font-size: 1.1em;
+            margin-top: 5px;
+        }
+
+        .secao-opcoes {
+            margin-bottom: 30px;
+        }
+
+        .secao-opcoes h2 {
+            display: flex;
+            align-items: center;
+            font-size: 1.5em;
+            color: var(--dark-text);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        .secao-opcoes h2 .numero-passo {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8em;
+            margin-right: 12px;
+        }
+
+        .opcoes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 15px;
+        }
+
+        .opcao {
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            background-color: #fff;
+        }
+
+        .opcao:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-color: var(--secondary-color);
+        }
+
+        .opcao.selecionado {
+            background-color: #E8F5E9; /* Verde bem clarinho */
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            font-weight: 600;
+            transform: scale(1.03);
+        }
+
+        .opcao .nome {
+            font-size: 1.05em;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .opcao .preco {
+            font-size: 0.95em;
+            color: var(--light-text);
+        }
+        
+        .opcao.selecionado .preco {
+            color: var(--primary-color);
+        }
+
+        .resumo-pedido, .dados-cliente {
+            background-color: #fdfdfd;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        .resumo-pedido h3, .dados-cliente h3 {
+            margin-top: 0;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+        }
+
+        #lista-resumo {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        #lista-resumo li {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px dashed #ddd;
+        }
+        
+        #lista-resumo li:last-child {
+            border-bottom: none;
+        }
+
+        #total-pedido {
+            font-size: 1.6em;
+            font-weight: 700;
+            text-align: right;
+            margin-top: 20px;
+            color: var(--primary-color);
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            margin-bottom: 12px;
+            box-sizing: border-box;
+            font-size: 1em;
+            font-family: 'Inter', sans-serif;
+            transition: border-color 0.2s;
+        }
+        
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .botao-finalizar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(90deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.25em;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 30px;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .botao-finalizar:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Mensagem de erro */
+        #mensagem-erro {
+            color: #D32F2F;
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 600;
+            display: none; /* Começa escondido */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>🥗 Salada da Jeh</h1>
+            <p>Monte sua salada do seu jeito: fresca, saudável e deliciosa!</p>
+        </header>
+
+        <!-- Seção Folhas -->
+        <div class="secao-opcoes">
+            <h2><span class="numero-passo">1</span>Escolha a Base (Folha)</h2>
+            <div class="opcoes-grid" id="folhas">
+                <div class="opcao" data-nome="Alface Americana" data-preco="8.00">
+                    <div class="nome">Alface Americana</div>
+                    <div class="preco">R$ 8,00</div>
+                </div>
+                <div class="opcao" data-nome="Mix de Folhas" data-preco="9.00">
+                    <div class="nome">Mix de Folhas</div>
+                    <div class="preco">R$ 9,00</div>
+                </div>
+                <div class="opcao" data-nome="Rúcula com Agrião" data-preco="8.50">
+                    <div class="nome">Rúcula c/ Agrião</div>
+                    <div class="preco">R$ 8,50</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção Proteínas -->
+        <div class="secao-opcoes">
+            <h2><span class="numero-passo">2</span>Escolha uma Proteína</h2>
+            <div class="opcoes-grid" id="proteinas">
+                <div class="opcao" data-nome="Frango Grelhado" data-preco="10.00">
+                    <div class="nome">Frango Grelhado</div>
+                    <div class="preco">R$ 10,00</div>
+                </div>
+                <div class="opcao" data-nome="Tiras de Carne" data-preco="12.00">
+                    <div class="nome">Tiras de Carne</div>
+                    <div class="preco">R$ 12,00</div>
+                </div>
+                <div class="opcao" data-nome="Ovo de Codorna" data-preco="7.00">
+                    <div class="nome">Ovo de Codorna</div>
+                    <div class="preco">R$ 7,00</div>
+                </div>
+                 <div class="opcao" data-nome="Grão de Bico" data-preco="8.00">
+                    <div class="nome">Grão de Bico</div>
+                    <div class="preco">R$ 8,00</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seção Molhos -->
+        <div class="secao-opcoes">
+            <h2><span class="numero-passo">3</span>Escolha o Molho</h2>
+            <div class="opcoes-grid" id="molhos">
+                <div class="opcao" data-nome="Mostarda e Mel" data-preco="4.00">
+                    <div class="nome">Mostarda e Mel</div>
+                    <div class="preco">R$ 4,00</div>
+                </div>
+                <div class="opcao" data-nome="Caesar" data-preco="4.50">
+                    <div class="nome">Caesar</div>
+                    <div class="preco">R$ 4,50</div>
+                </div>
+                <div class="opcao" data-nome="Italiano" data-preco="4.00">
+                    <div class="nome">Italiano</div>
+                    <div class="preco">R$ 4,00</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Dados do Cliente -->
+        <div class="dados-cliente">
+             <h3><span class="numero-passo">4</span>Seus Dados</h3>
+             <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
+             <input type="text" id="endereco-cliente" placeholder="Seu endereço para entrega" required>
+        </div>
+
+        <!-- Resumo do Pedido -->
+        <div class="resumo-pedido">
+            <h3>🛒 Resumo do seu Pedido</h3>
+            <ul id="lista-resumo">
+                <!-- Itens selecionados aparecerão aqui -->
+            </ul>
+            <div id="total-pedido">Total: R$ 0,00</div>
+        </div>
+        
+        <p id="mensagem-erro"></p>
+        
+        <button class="botao-finalizar" onclick="enviarPedido()">
+             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            Finalizar e Pedir pelo WhatsApp
+        </button>
+    </div>
+
+    <script>
+        // Objeto para guardar as escolhas do cliente
+        const pedido = {
+            folha: null,
+            proteina: null,
+            molho: null
+        };
+
+        // Objeto para guardar os preços dos itens escolhidos
+        const precos = {
+            folha: 0,
+            proteina: 0,
+            molho: 0
+        };
+        
+        const mensagemErroEl = document.getElementById('mensagem-erro');
+
+        // Função para selecionar uma opção
+        function selecionarOpcao(tipo, elemento) {
+            // Remove a classe 'selecionado' de qualquer outra opção no mesmo grupo
+            const grupo = document.getElementById(tipo);
+            grupo.querySelectorAll('.opcao').forEach(opt => opt.classList.remove('selecionado'));
+
+            // Adiciona a classe 'selecionado' ao elemento clicado
+            elemento.classList.add('selecionado');
+            
+            // Armazena o nome do item e o preço
+            pedido[tipo] = elemento.dataset.nome;
+            precos[tipo] = parseFloat(elemento.dataset.preco);
+
+            // Atualiza o resumo do pedido na tela
+            atualizarResumo();
+        }
+        
+        // Função para atualizar o resumo e o total
+        function atualizarResumo() {
+            const listaResumo = document.getElementById('lista-resumo');
+            listaResumo.innerHTML = ''; // Limpa a lista antes de adicionar os itens
+            let total = 0;
+
+            // Formata um valor para moeda brasileira (BRL)
+            const formatarMoeda = (valor) => {
+                return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+            };
+
+            if (pedido.folha) {
+                listaResumo.innerHTML += `<li><span>Base: ${pedido.folha}</span> <span>${formatarMoeda(precos.folha)}</span></li>`;
+                total += precos.folha;
+            }
+            if (pedido.proteina) {
+                listaResumo.innerHTML += `<li><span>Proteína: ${pedido.proteina}</span> <span>${formatarMoeda(precos.proteina)}</span></li>`;
+                total += precos.proteina;
+            }
+            if (pedido.molho) {
+                listaResumo.innerHTML += `<li><span>Molho: ${pedido.molho}</span> <span>${formatarMoeda(precos.molho)}</span></li>`;
+                total += precos.molho;
+            }
+            
+            // Atualiza o texto do total do pedido
+            document.getElementById('total-pedido').innerText = `Total: ${formatarMoeda(total)}`;
+        }
+
+        // Função para finalizar o pedido e enviar para o WhatsApp
+        function enviarPedido() {
+            const nomeCliente = document.getElementById('nome-cliente').value;
+            const enderecoCliente = document.getElementById('endereco-cliente').value;
+            
+            mensagemErroEl.style.display = 'none'; // Esconde a mensagem de erro
+
+            // Validação para garantir que tudo foi preenchido
+            if (!pedido.folha || !pedido.proteina || !pedido.molho) {
+                mensagemErroEl.innerText = 'Por favor, selecione uma opção de cada categoria!';
+                mensagemErroEl.style.display = 'block';
+                return;
+            }
+            if (nomeCliente.trim() === '' || enderecoCliente.trim() === '') {
+                mensagemErroEl.innerText = 'Por favor, preencha seu nome e endereço!';
+                mensagemErroEl.style.display = 'block';
+                return;
+            }
+
+            let total = precos.folha + precos.proteina + precos.molho;
+
+            // Monta a mensagem formatada para o WhatsApp
+            let mensagem = `Olá, *Salada da Jeh*! 🥗\nGostaria de fazer um novo pedido:\n\n`;
+            mensagem += `*Cliente:* ${nomeCliente}\n`;
+            mensagem += `*Endereço de Entrega:* ${enderecoCliente}\n\n`;
+            mensagem += `*MINHA SALADA*\n`;
+            mensagem += `----------------------\n`;
+            mensagem += `*Base:* ${pedido.folha}\n`;
+            mensagem += `*Proteína:* ${pedido.proteina}\n`;
+            mensagem += `*Molho:* ${pedido.molho}\n`;
+            mensagem += `----------------------\n`;
+            mensagem += `*TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
+            mensagem += `Aguardo a confirmação do meu pedido. Obrigado!`;
+
+            // **IMPORTANTE**: Substitua o número abaixo pelo seu número de WhatsApp
+            const numeroWhatsApp = '5535000000000'; // Formato: 55 (País) + DDD + Número
+            
+            // Cria o link para o WhatsApp
+            const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+
+            // Abre o link em uma nova aba
+            window.open(linkWhatsApp, '_blank');
+        }
+
+        // Adiciona os "escutadores" de clique para cada opção de salada
+        document.querySelectorAll('#folhas .opcao').forEach(el => {
+            el.addEventListener('click', () => selecionarOpcao('folha', el));
+        });
+        document.querySelectorAll('#proteinas .opcao').forEach(el => {
+            el.addEventListener('click', () => selecionarOpcao('proteina', el));
+        });
+         document.querySelectorAll('#molhos .opcao').forEach(el => {
+            el.addEventListener('click', () => selecionarOpcao('molho', el));
+        });
+
+    </script>
+</body>
+</html>

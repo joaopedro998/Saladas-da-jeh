@@ -7,6 +7,7 @@
     --background-color: #FDFBF5; /* Fundo creme do logo */
     --white-color: #FFFFFF;
     --border-color: #E0E0E0;
+    --red-color: #D32F2F;
 }
 
 body {
@@ -34,6 +35,25 @@ body {
 header {
     text-align: center;
     margin-bottom: 35px;
+    position: relative;
+}
+
+#status-loja {
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: var(--white-color);
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+
+#status-loja.aberto {
+    background-color: var(--primary-color);
+}
+
+#status-loja.fechado {
+    background-color: var(--red-color);
 }
 
 header h1 {
@@ -88,8 +108,8 @@ header p {
     gap: 15px;
 }
 
-.opcoes-grid.duas-colunas {
-    grid-template-columns: 1fr 1fr;
+.opcoes-grid.duas-colunas, .opcoes-grid.tres-colunas {
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
 .opcao {
@@ -109,7 +129,7 @@ header p {
 }
 
 .opcao.selecionado {
-    background-color: #eaf1ea; /* Verde bem clarinho */
+    background-color: #eaf1ea;
     border-color: var(--primary-color);
     color: var(--primary-color);
     font-weight: 600;
@@ -200,8 +220,12 @@ input[type="text"]:focus, textarea:focus {
     border-color: var(--primary-color);
 }
 
-#campo-endereco {
+#campo-endereco, #campo-troco {
     transition: all 0.3s ease;
+}
+
+#campo-troco {
+    display: none; /* Começa escondido */
 }
 
 .botao-finalizar {
@@ -230,8 +254,15 @@ input[type="text"]:focus, textarea:focus {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
+.botao-finalizar:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+
 #mensagem-erro {
-    color: #D32F2F;
+    color: var(--red-color);
     text-align: center;
     margin-top: 15px;
     font-weight: 600;

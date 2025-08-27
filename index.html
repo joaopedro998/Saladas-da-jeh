@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Salada da Jeh - Monte a Sua!</title>
+    <link rel="icon" type="image/jpeg" href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAJgAmADASIAAhEBAxEB/8QAGwABAAMBAQEBAAAAAAAAAAAAAAECBAMFBgf/xAA3EAEAAgECAwQIAwEGBwAAAAAAAQIDBBEFEiExQVFhcRMigZEyQlKhscHwBhThI/EzUoLh8VL/xAAaAQEBAQEBAQEAAAAAAAAAAAAAAQIDBAUG/8QAKREBAQACAgEDAgYDAAAAAAAAAAECEQMhEjFBUQQiYTJxgTORI0Khsf/a">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <!-- Link para o arquivo CSS externo -->
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <div class="container">
         <header>
+            <div id="status-loja"></div>
             <h1>🥗 Salada da Jeh</h1>
             <p>Monte sua salada do seu jeito: fresca, saudável e deliciosa!</p>
         </header>
@@ -129,12 +130,31 @@
                 </div>
             </div>
         </div>
+        
+        <!-- NOVA Seção Forma de Pagamento -->
+        <div class="secao-opcoes">
+            <h2><span class="numero-passo">6</span>Forma de Pagamento</h2>
+            <div class="opcoes-grid" id="forma-pagamento">
+                <div class="opcao" data-pagamento="PIX">
+                    <div class="nome">PIX</div>
+                </div>
+                <div class="opcao" data-pagamento="Cartão">
+                    <div class="nome">Cartão</div>
+                </div>
+                <div class="opcao" data-pagamento="Dinheiro">
+                    <div class="nome">Dinheiro</div>
+                </div>
+            </div>
+        </div>
 
         <div class="dados-cliente">
              <h3><span class="numero-passo">✓</span>Seus Dados</h3>
              <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
              <div id="campo-endereco">
                 <input type="text" id="endereco-cliente" placeholder="Seu endereço para entrega" required>
+             </div>
+             <div id="campo-troco">
+                <input type="text" id="troco" placeholder="Precisa de troco para quanto?">
              </div>
              <textarea id="observacoes" placeholder="Observações do pedido (ex: sem cebola, ponto da carne, etc)"></textarea>
         </div>
@@ -147,13 +167,12 @@
         
         <p id="mensagem-erro"></p>
         
-        <button class="botao-finalizar" onclick="enviarPedido()">
+        <button class="botao-finalizar" id="btn-finalizar" onclick="enviarPedido()">
              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
             Finalizar e Pedir pelo WhatsApp
         </button>
     </div>
 
-    <!-- Link para o arquivo JavaScript externo -->
     <script src="script.js"></script>
 </body>
 </html>

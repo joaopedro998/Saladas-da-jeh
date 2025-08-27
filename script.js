@@ -1,12 +1,18 @@
-const TAXA_ENTREGA = 7.00; // Define a taxa de entrega aqui
+// --- CONFIGURAÇÕES ---
+const TAXA_ENTREGA = 7.00;
+const HORA_ABERTURA = 11; // 11:00
+const HORA_FECHAMENTO = 22; // 22:00
+const NUMERO_WHATSAPP = '5535000000000'; // Insira seu número aqui
 
+// --- ESTADO DO PEDIDO ---
 const pedido = {
     saladaPronta: null,
     folha: null,
     proteina: null,
     molho: null,
     extras: [],
-    metodoEntrega: 'entrega' // Valor padrão
+    metodoEntrega: 'entrega',
+    formaPagamento: null,
 };
 
 const precos = {
@@ -16,9 +22,15 @@ const precos = {
     molho: 0,
 };
 
+// --- ELEMENTOS DO DOM ---
 const mensagemErroEl = document.getElementById('mensagem-erro');
 const secaoMonteSuaSalada = document.getElementById('monte-sua-salada');
 const campoEnderecoEl = document.getElementById('campo-endereco');
+const campoTrocoEl = document.getElementById('campo-troco');
+const statusLojaEl = document.getElementById('status-loja');
+const btnFinalizar = document.getElementById('btn-finalizar');
+
+// --- FUNÇÕES DE LÓGICA ---
 
 function limparSelecaoMonteSua() {
     secaoMonteSuaSalada.querySelectorAll('.opcao.selecionado').forEach(el => el.classList.remove('selecionado'));
@@ -86,18 +98,20 @@ function selecionarExtra(elemento) {
 }
 
 function selecionarMetodoEntrega(elemento) {
-    const metodo = elemento.dataset.metodo;
-    pedido.metodoEntrega = metodo;
-
+    pedido.metodoEntrega = elemento.dataset.metodo;
     document.querySelectorAll('#metodo-entrega .opcao').forEach(opt => opt.classList.remove('selecionado'));
     elemento.classList.add('selecionado');
 
-    if (metodo === 'retirada') {
-        campoEnderecoEl.style.display = 'none';
-    } else {
-        campoEnderecoEl.style.display = 'block';
-    }
-    atualizarResumo(); // Atualiza o resumo para adicionar/remover a taxa
+    campoEnderecoEl.style.display = (pedido.metodoEntrega === 'retirada') ? 'none' : 'block';
+    atualizarResumo();
+}
+
+function selecionarFormaPagamento(elemento) {
+    pedido.formaPagamento = elemento.dataset.pagamento;
+    document.querySelectorAll('#forma-pagamento .opcao').forEach(opt => opt.classList.remove('selecionado'));
+    elemento.classList.add('selecionado');
+    
+    campoTrocoEl.style.display = (pedido.formaPagamento === 'Dinheiro') ? 'block' : 'none';
 }
 
 function atualizarResumo() {
@@ -122,16 +136,13 @@ function atualizarResumo() {
             listaResumo.innerHTML += `<li><span>Molho: ${pedido.molho}</span> <span>${formatarMoeda(precos.molho)}</span></li>`;
             total += precos.molho;
         }
-        if (pedido.extras.length > 0) {
-            pedido.extras.forEach(extra => {
-                listaResumo.innerHTML += `<li><span>Extra: ${extra.nome}</span> <span>${formatarMoeda(extra.preco)}</span></li>`;
-                total += extra.preco;
-            });
-        }
+        pedido.extras.forEach(extra => {
+            listaResumo.innerHTML += `<li><span>Extra: ${extra.nome}</span> <span>${formatarMoeda(extra.preco)}</span></li>`;
+            total += extra.preco;
+        });
     }
     
-    // Adiciona a taxa de entrega se o método for 'entrega'
-    if (pedido.metodoEntrega === 'entrega') {
+    if (pedido.metodoEntrega === 'entrega' && total > 0) {
         listaResumo.innerHTML += `<li><span>Taxa de Entrega</span> <span>${formatarMoeda(TAXA_ENTREGA)}</span></li>`;
         total += TAXA_ENTREGA;
     }
@@ -143,11 +154,18 @@ function enviarPedido() {
     const nomeCliente = document.getElementById('nome-cliente').value;
     const enderecoCliente = document.getElementById('endereco-cliente').value;
     const observacoes = document.getElementById('observacoes').value;
+    const troco = document.getElementById('troco').value;
     mensagemErroEl.style.display = 'none';
 
+    // Validações
     const isMonteSuaInvalido = !pedido.folha || !pedido.proteina || !pedido.molho;
     if (!pedido.saladaPronta && isMonteSuaInvalido) {
         mensagemErroEl.innerText = 'Por favor, escolha uma salada pronta ou monte a sua por completo!';
+        mensagemErroEl.style.display = 'block';
+        return;
+    }
+    if (!pedido.formaPagamento) {
+        mensagemErroEl.innerText = 'Por favor, escolha uma forma de pagamento!';
         mensagemErroEl.style.display = 'block';
         return;
     }
@@ -157,36 +175,37 @@ function enviarPedido() {
         return;
     }
     if (pedido.metodoEntrega === 'entrega' && enderecoCliente.trim() === '') {
-         mensagemErroEl.innerText = 'Por favor, preencha seu endereço para entrega!';
+        mensagemErroEl.innerText = 'Por favor, preencha seu endereço para entrega!';
         mensagemErroEl.style.display = 'block';
         return;
     }
 
+    // Montagem da Mensagem
     let total = 0;
-    let mensagem = `Olá, *Salada da Jeh*! 🥗\nGostaria de fazer um novo pedido:\n\n`;
+    let mensagem = `Olá, *Salada da Jeh*! 🥗\n\nGostaria de fazer um novo pedido:\n\n`;
     mensagem += `*Cliente:* ${nomeCliente}\n`;
     
     if (pedido.metodoEntrega === 'entrega') {
-        mensagem += `*Método:* Entrega 🛵\n`;
-        mensagem += `*Endereço:* ${enderecoCliente}\n\n`;
+        mensagem += `*Método:* Entrega 🛵\n*Endereço:* ${enderecoCliente}\n`;
     } else {
-        mensagem += `*Método:* Retirada no local 🛍️\n\n`;
+        mensagem += `*Método:* Retirada no local 🛍️\n`;
     }
+
+    mensagem += `*Pagamento:* ${pedido.formaPagamento}\n`;
+    if (pedido.formaPagamento === 'Dinheiro' && troco.trim() !== '') {
+        mensagem += `*Troco para:* R$ ${troco}\n`;
+    }
+    mensagem += `\n`;
 
     if (pedido.saladaPronta) {
         total = precos.saladaPronta;
-        mensagem += `*SALADA PRONTA*\n`;
-        mensagem += `----------------------\n`;
-        mensagem += `*Item:* ${pedido.saladaPronta.nome}\n`;
-        mensagem += `(${pedido.saladaPronta.descricao})\n`;
+        mensagem += `*SALADA PRONTA*\n----------------------\n`;
+        mensagem += `*Item:* ${pedido.saladaPronta.nome}\n(${pedido.saladaPronta.descricao})\n`;
     } else {
         total = precos.folha + precos.proteina + precos.molho;
         pedido.extras.forEach(extra => total += extra.preco);
-        mensagem += `*SALADA MONTADA*\n`;
-        mensagem += `----------------------\n`;
-        mensagem += `*Base:* ${pedido.folha}\n`;
-        mensagem += `*Proteína:* ${pedido.proteina}\n`;
-        mensagem += `*Molho:* ${pedido.molho}\n`;
+        mensagem += `*SALADA MONTADA*\n----------------------\n`;
+        mensagem += `*Base:* ${pedido.folha}\n*Proteína:* ${pedido.proteina}\n*Molho:* ${pedido.molho}\n`;
         if (pedido.extras.length > 0) {
             mensagem += `*Extras:*\n`;
             pedido.extras.forEach(extra => {
@@ -194,7 +213,7 @@ function enviarPedido() {
             });
         }
     }
-
+    
     if (pedido.metodoEntrega === 'entrega') {
         total += TAXA_ENTREGA;
     }
@@ -203,14 +222,30 @@ function enviarPedido() {
         mensagem += `\n*Observações:* ${observacoes}\n`;
     }
     
-    mensagem += `----------------------\n`;
-    mensagem += `*TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
+    mensagem += `----------------------\n*TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
     mensagem += `Aguardo a confirmação do meu pedido. Obrigado!`;
 
-    const numeroWhatsApp = '5535997402421';
-    const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
+    const linkWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
     window.open(linkWhatsApp, '_blank');
 }
+
+function verificarStatusLoja() {
+    const agora = new Date();
+    const horaAtual = agora.getHours();
+    const lojaAberta = horaAtual >= HORA_ABERTURA && horaAtual < HORA_FECHAMENTO;
+
+    if (lojaAberta) {
+        statusLojaEl.textContent = 'Aberto para pedidos!';
+        statusLojaEl.className = 'aberto';
+        btnFinalizar.disabled = false;
+    } else {
+        statusLojaEl.textContent = `Fechado (Aberto das ${HORA_ABERTURA}:00 às ${HORA_FECHAMENTO}:00)`;
+        statusLojaEl.className = 'fechado';
+        btnFinalizar.disabled = true;
+    }
+}
+
+// --- INICIALIZAÇÃO E EVENTOS ---
 
 // Adiciona os "escutadores" de clique aos elementos da página
 document.querySelectorAll('#saladas-prontas .opcao').forEach(el => {
@@ -226,3 +261,9 @@ document.querySelectorAll('#extras .opcao').forEach(el => {
 document.querySelectorAll('#metodo-entrega .opcao').forEach(el => {
     el.addEventListener('click', () => selecionarMetodoEntrega(el));
 });
+document.querySelectorAll('#forma-pagamento .opcao').forEach(el => {
+    el.addEventListener('click', () => selecionarFormaPagamento(el));
+});
+
+// Verifica o status da loja ao carregar a página
+document.addEventListener('DOMContentLoaded', verificarStatusLoja);

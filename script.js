@@ -207,7 +207,7 @@ function enviarPedido() {
     mensagem += `*TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
     mensagem += `Aguardo a confirmação do meu pedido. Obrigado!`;
 
-    const numeroWhatsApp = '5535000000000';
+    const numeroWhatsApp = '5535997402421';
     const linkWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
     window.open(linkWhatsApp, '_blank');
 }

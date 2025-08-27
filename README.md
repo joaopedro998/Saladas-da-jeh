@@ -41,7 +41,7 @@ Para rodar este projeto localmente ou para personalizá-lo para o seu negócio, 
 
 Você pode clonar este repositório usando Git:
 ```bash
-git clone https://[URL_DO_SEU_REPOSITORIO]
+git clone https://[[URL_DO_SEU_REPOSITORIO](https://github.com/joaopedro998/Saladas-da-jeh/tree/main)]
 ```
 Ou simplesmente baixar o arquivo `index.html`.
 

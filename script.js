@@ -1,107 +1,97 @@
 // --- CONFIGURAÇÕES ---
-const TAXA_ENTREGA = 7.00;
+const PRECO_FIXO_SALADA = 15.00;
+const LIMITE_OPCIONAIS = 3;
+const TAXA_ENTREGA = 7.00; // Mantenha ou altere conforme necessário
 const HORA_ABERTURA = 11; // 11:00
 const HORA_FECHAMENTO = 22; // 22:00
-const NUMERO_WHATSAPP = '5535997402421'; // Insira seu número aqui
+const NUMERO_WHATSAPP = '5535999280299'; // Insira seu número aqui
 
 // --- ESTADO DO PEDIDO ---
 const pedido = {
-    saladaPronta: null,
-    folha: null,
+    base: null,
     proteina: null,
+    opcionais: [],
     molho: null,
-    extras: [],
     metodoEntrega: 'entrega',
     formaPagamento: null,
 };
 
-const precos = {
-    saladaPronta: 0,
-    folha: 0,
-    proteina: 0,
-    molho: 0,
-};
-
 // --- ELEMENTOS DO DOM ---
 const mensagemErroEl = document.getElementById('mensagem-erro');
-const secaoMonteSuaSalada = document.getElementById('monte-sua-salada');
 const campoEnderecoEl = document.getElementById('campo-endereco');
 const campoTrocoEl = document.getElementById('campo-troco');
 const statusLojaEl = document.getElementById('status-loja');
 const btnFinalizar = document.getElementById('btn-finalizar');
+const contadorOpcionaisEl = document.getElementById('contador-opcionais');
+const todosOpcionaisEl = document.querySelectorAll('#opcionais .opcao-multiplo');
 
 // --- FUNÇÕES DE LÓGICA ---
 
-function limparSelecaoMonteSua() {
-    secaoMonteSuaSalada.querySelectorAll('.opcao.selecionado').forEach(el => el.classList.remove('selecionado'));
-    pedido.folha = null;
-    pedido.proteina = null;
-    pedido.molho = null;
-    pedido.extras = [];
-    precos.folha = 0;
-    precos.proteina = 0;
-    precos.molho = 0;
-}
-
-function limparSelecaoPronta() {
-    document.querySelectorAll('#saladas-prontas .opcao.selecionado').forEach(el => el.classList.remove('selecionado'));
-    pedido.saladaPronta = null;
-    precos.saladaPronta = 0;
-}
-
-function selecionarSaladaPronta(elemento) {
-    limparSelecaoMonteSua();
-    secaoMonteSuaSalada.classList.add('desativado');
-
-    const grupo = document.getElementById('saladas-prontas');
-    grupo.querySelectorAll('.opcao').forEach(opt => opt.classList.remove('selecionado'));
-    elemento.classList.add('selecionado');
-    
-    pedido.saladaPronta = {
-        nome: elemento.dataset.nome,
-        descricao: elemento.dataset.descricao
-    };
-    precos.saladaPronta = parseFloat(elemento.dataset.preco);
-    atualizarResumo();
-}
-
+/**
+ * Para seções com escolha única (Base, Proteína, Molho).
+ * @param {string} tipo - O tipo da seleção (ex: "base", "proteina", "molho").
+ * @param {HTMLElement} elemento - O elemento HTML clicado.
+ */
 function selecionarOpcaoUnica(tipo, elemento) {
-    limparSelecaoPronta();
-    secaoMonteSuaSalada.classList.remove('desativado');
-
-    const grupo = document.getElementById(tipo);
+    // CORREÇÃO: Adicionado 's' ao final de 'tipo' para encontrar o ID correto no plural (ex: "bases", "proteinas", "molhos")
+    const grupo = document.getElementById(tipo + 's'); 
+    
     grupo.querySelectorAll('.opcao').forEach(opt => opt.classList.remove('selecionado'));
     elemento.classList.add('selecionado');
-    
-    const tipoSingular = tipo.slice(0, -1);
-    pedido[tipoSingular] = elemento.dataset.nome;
-    precos[tipoSingular] = parseFloat(elemento.dataset.preco);
+    pedido[tipo] = elemento.dataset.nome;
     atualizarResumo();
 }
 
-function selecionarExtra(elemento) {
-    limparSelecaoPronta();
-    secaoMonteSuaSalada.classList.remove('desativado');
-
+/**
+ * Para seção com escolha múltipla (Opcionais).
+ * @param {HTMLElement} elemento - O elemento HTML clicado.
+ */
+function selecionarOpcional(elemento) {
     const nome = elemento.dataset.nome;
-    const preco = parseFloat(elemento.dataset.preco);
+    const jaSelecionado = elemento.classList.contains('selecionado');
 
-    elemento.classList.toggle('selecionado');
-    const index = pedido.extras.findIndex(extra => extra.nome === nome);
-
-    if (index > -1) {
-        pedido.extras.splice(index, 1);
+    if (jaSelecionado) {
+        // Desmarcar o item
+        elemento.classList.remove('selecionado');
+        const index = pedido.opcionais.indexOf(nome);
+        if (index > -1) {
+            pedido.opcionais.splice(index, 1);
+        }
     } else {
-        pedido.extras.push({ nome, preco });
+        // Marcar um novo item, se houver espaço
+        if (pedido.opcionais.length < LIMITE_OPCIONAIS) {
+            elemento.classList.add('selecionado');
+            pedido.opcionais.push(nome);
+        }
     }
+    atualizarContadorOpcionais();
     atualizarResumo();
+}
+
+/**
+ * Atualiza o contador visual de opcionais (ex: "2/3") e habilita/desabilita opções.
+ */
+function atualizarContadorOpcionais() {
+    const contagem = pedido.opcionais.length;
+    contadorOpcionaisEl.textContent = `(${contagem}/${LIMITE_OPCIONAIS})`;
+
+    if (contagem >= LIMITE_OPCIONAIS) {
+        todosOpcionaisEl.forEach(el => {
+            if (!el.classList.contains('selecionado')) {
+                el.classList.add('desabilitado');
+            }
+        });
+    } else {
+        todosOpcionaisEl.forEach(el => {
+            el.classList.remove('desabilitado');
+        });
+    }
 }
 
 function selecionarMetodoEntrega(elemento) {
     pedido.metodoEntrega = elemento.dataset.metodo;
     document.querySelectorAll('#metodo-entrega .opcao').forEach(opt => opt.classList.remove('selecionado'));
     elemento.classList.add('selecionado');
-
     campoEnderecoEl.style.display = (pedido.metodoEntrega === 'retirada') ? 'none' : 'block';
     atualizarResumo();
 }
@@ -110,7 +100,6 @@ function selecionarFormaPagamento(elemento) {
     pedido.formaPagamento = elemento.dataset.pagamento;
     document.querySelectorAll('#forma-pagamento .opcao').forEach(opt => opt.classList.remove('selecionado'));
     elemento.classList.add('selecionado');
-    
     campoTrocoEl.style.display = (pedido.formaPagamento === 'Dinheiro') ? 'block' : 'none';
 }
 
@@ -120,31 +109,19 @@ function atualizarResumo() {
     let total = 0;
     const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 
-    if (pedido.saladaPronta) {
-        listaResumo.innerHTML += `<li><span>${pedido.saladaPronta.nome}</span> <span>${formatarMoeda(precos.saladaPronta)}</span></li>`;
-        total = precos.saladaPronta;
+    // Verifica se todos os itens obrigatórios foram selecionados
+    const pedidoCompleto = pedido.base && pedido.proteina && pedido.molho && pedido.opcionais.length === LIMITE_OPCIONAIS;
+
+    if (pedidoCompleto) {
+        total = PRECO_FIXO_SALADA;
+        listaResumo.innerHTML += `<li><span>Salada Completa (5 itens + molho)</span> <span>${formatarMoeda(PRECO_FIXO_SALADA)}</span></li>`;
+
+        if (pedido.metodoEntrega === 'entrega') {
+            listaResumo.innerHTML += `<li><span>Taxa de Entrega</span> <span>${formatarMoeda(TAXA_ENTREGA)}</span></li>`;
+            total += TAXA_ENTREGA;
+        }
     } else {
-        if (pedido.folha) {
-            listaResumo.innerHTML += `<li><span>Base: ${pedido.folha}</span> <span>${formatarMoeda(precos.folha)}</span></li>`;
-            total += precos.folha;
-        }
-        if (pedido.proteina) {
-            listaResumo.innerHTML += `<li><span>Proteína: ${pedido.proteina}</span> <span>${formatarMoeda(precos.proteina)}</span></li>`;
-            total += precos.proteina;
-        }
-        if (pedido.molho) {
-            listaResumo.innerHTML += `<li><span>Molho: ${pedido.molho}</span> <span>${formatarMoeda(precos.molho)}</span></li>`;
-            total += precos.molho;
-        }
-        pedido.extras.forEach(extra => {
-            listaResumo.innerHTML += `<li><span>Extra: ${extra.nome}</span> <span>${formatarMoeda(extra.preco)}</span></li>`;
-            total += extra.preco;
-        });
-    }
-    
-    if (pedido.metodoEntrega === 'entrega' && total > 0) {
-        listaResumo.innerHTML += `<li><span>Taxa de Entrega</span> <span>${formatarMoeda(TAXA_ENTREGA)}</span></li>`;
-        total += TAXA_ENTREGA;
+         listaResumo.innerHTML = '<li>Selecione todos os itens para ver o total.</li>';
     }
 
     document.getElementById('total-pedido').innerText = `Total: ${formatarMoeda(total)}`;
@@ -158,30 +135,44 @@ function enviarPedido() {
     mensagemErroEl.style.display = 'none';
 
     // Validações
-    const isMonteSuaInvalido = !pedido.folha || !pedido.proteina || !pedido.molho;
-    if (!pedido.saladaPronta && isMonteSuaInvalido) {
-        mensagemErroEl.innerText = 'Por favor, escolha uma salada pronta ou monte a sua por completo!';
+    if (!pedido.base) {
+        mensagemErroEl.innerText = 'Por favor, escolha 1 base.';
+        mensagemErroEl.style.display = 'block';
+        return;
+    }
+     if (!pedido.proteina) {
+        mensagemErroEl.innerText = 'Por favor, escolha 1 proteína.';
+        mensagemErroEl.style.display = 'block';
+        return;
+    }
+    if (pedido.opcionais.length !== LIMITE_OPCIONAIS) {
+        mensagemErroEl.innerText = `Por favor, escolha exatamente ${LIMITE_OPCIONAIS} opcionais.`;
+        mensagemErroEl.style.display = 'block';
+        return;
+    }
+    if (!pedido.molho) {
+        mensagemErroEl.innerText = 'Por favor, escolha 1 molho.';
         mensagemErroEl.style.display = 'block';
         return;
     }
     if (!pedido.formaPagamento) {
-        mensagemErroEl.innerText = 'Por favor, escolha uma forma de pagamento!';
+        mensagemErroEl.innerText = 'Por favor, escolha uma forma de pagamento.';
         mensagemErroEl.style.display = 'block';
         return;
     }
     if (nomeCliente.trim() === '') {
-        mensagemErroEl.innerText = 'Por favor, preencha seu nome!';
+        mensagemErroEl.innerText = 'Por favor, preencha seu nome.';
         mensagemErroEl.style.display = 'block';
         return;
     }
     if (pedido.metodoEntrega === 'entrega' && enderecoCliente.trim() === '') {
-        mensagemErroEl.innerText = 'Por favor, preencha seu endereço para entrega!';
+        mensagemErroEl.innerText = 'Por favor, preencha seu endereço para entrega.';
         mensagemErroEl.style.display = 'block';
         return;
     }
 
     // Montagem da Mensagem
-    let total = 0;
+    let total = PRECO_FIXO_SALADA;
     let mensagem = `Olá, *Salada da Jeh*! 🥗\n\nGostaria de fazer um novo pedido:\n\n`;
     mensagem += `*Cliente:* ${nomeCliente}\n`;
     
@@ -195,24 +186,14 @@ function enviarPedido() {
     if (pedido.formaPagamento === 'Dinheiro' && troco.trim() !== '') {
         mensagem += `*Troco para:* R$ ${troco}\n`;
     }
-    mensagem += `\n`;
-
-    if (pedido.saladaPronta) {
-        total = precos.saladaPronta;
-        mensagem += `*SALADA PRONTA*\n----------------------\n`;
-        mensagem += `*Item:* ${pedido.saladaPronta.nome}\n(${pedido.saladaPronta.descricao})\n`;
-    } else {
-        total = precos.folha + precos.proteina + precos.molho;
-        pedido.extras.forEach(extra => total += extra.preco);
-        mensagem += `*SALADA MONTADA*\n----------------------\n`;
-        mensagem += `*Base:* ${pedido.folha}\n*Proteína:* ${pedido.proteina}\n*Molho:* ${pedido.molho}\n`;
-        if (pedido.extras.length > 0) {
-            mensagem += `*Extras:*\n`;
-            pedido.extras.forEach(extra => {
-                mensagem += `  - ${extra.nome}\n`;
-            });
-        }
-    }
+    mensagem += `\n*SALADA MONTADA*\n----------------------\n`;
+    mensagem += `*Base:* ${pedido.base}\n`;
+    mensagem += `*Proteína:* ${pedido.proteina}\n`;
+    mensagem += `*Opcionais:*\n`;
+    pedido.opcionais.forEach(item => {
+        mensagem += `  - ${item}\n`;
+    });
+    mensagem += `*Molho:* ${pedido.molho}\n`;
     
     if (pedido.metodoEntrega === 'entrega') {
         total += TAXA_ENTREGA;
@@ -247,16 +228,17 @@ function verificarStatusLoja() {
 
 // --- INICIALIZAÇÃO E EVENTOS ---
 
-// Adiciona os "escutadores" de clique aos elementos da página
-document.querySelectorAll('#saladas-prontas .opcao').forEach(el => {
-    el.addEventListener('click', () => selecionarSaladaPronta(el));
+document.querySelectorAll('#bases .opcao').forEach(el => {
+    el.addEventListener('click', () => selecionarOpcaoUnica('base', el));
 });
-document.querySelectorAll('#folhas .opcao, #proteinas .opcao, #molhos .opcao').forEach(el => {
-    const tipo = el.parentElement.id;
-    el.addEventListener('click', () => selecionarOpcaoUnica(tipo, el));
+document.querySelectorAll('#proteinas .opcao').forEach(el => {
+    el.addEventListener('click', () => selecionarOpcaoUnica('proteina', el));
 });
-document.querySelectorAll('#extras .opcao').forEach(el => {
-    el.addEventListener('click', () => selecionarExtra(el));
+document.querySelectorAll('#molhos .opcao').forEach(el => {
+    el.addEventListener('click', () => selecionarOpcaoUnica('molho', el));
+});
+document.querySelectorAll('#opcionais .opcao-multiplo').forEach(el => {
+    el.addEventListener('click', () => selecionarOpcional(el));
 });
 document.querySelectorAll('#metodo-entrega .opcao').forEach(el => {
     el.addEventListener('click', () => selecionarMetodoEntrega(el));
@@ -265,5 +247,7 @@ document.querySelectorAll('#forma-pagamento .opcao').forEach(el => {
     el.addEventListener('click', () => selecionarFormaPagamento(el));
 });
 
-// Verifica o status da loja ao carregar a página
-document.addEventListener('DOMContentLoaded', verificarStatusLoja);
+document.addEventListener('DOMContentLoaded', () => {
+    verificarStatusLoja();
+    atualizarContadorOpcionais(); // Inicia o contador em (0/3)
+});

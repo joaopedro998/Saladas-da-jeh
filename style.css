@@ -1,10 +1,10 @@
-/* CSS para estilizar a página com as cores do logo */
+/* CSS para estilizar a página */
 :root {
-    --primary-color: #2E592D; /* Verde escuro do logo */
-    --secondary-color: #5a8a59; /* Verde mais claro para hover */
+    --primary-color: #2E592D; 
+    --secondary-color: #5a8a59; 
     --dark-text: #333;
     --light-text: #666;
-    --background-color: #FDFBF5; /* Fundo creme do logo */
+    --background-color: #FDFBF5; 
     --white-color: #FFFFFF;
     --border-color: #E0E0E0;
     --red-color: #D32F2F;
@@ -71,12 +71,6 @@ header p {
 
 .secao-opcoes {
     margin-bottom: 30px;
-    transition: opacity 0.3s ease;
-}
-
-.secao-opcoes.desativado {
-    opacity: 0.5;
-    pointer-events: none;
 }
 
 .secao-opcoes h2 {
@@ -102,17 +96,24 @@ header p {
     margin-right: 12px;
 }
 
+#contador-opcionais {
+    margin-left: 10px;
+    font-size: 0.8em;
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
 .opcoes-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
     gap: 15px;
 }
 
-.opcoes-grid.duas-colunas, .opcoes-grid.tres-colunas {
+.opcoes-grid.duas-colunas {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
-.opcao {
+.opcao, .opcao-multiplo {
     border: 2px solid var(--border-color);
     border-radius: 12px;
     padding: 15px;
@@ -122,13 +123,13 @@ header p {
     background-color: #fff;
 }
 
-.opcao:hover {
+.opcao:hover, .opcao-multiplo:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     border-color: var(--secondary-color);
 }
 
-.opcao.selecionado {
+.opcao.selecionado, .opcao-multiplo.selecionado {
     background-color: #eaf1ea;
     border-color: var(--primary-color);
     color: var(--primary-color);
@@ -136,25 +137,16 @@ header p {
     transform: scale(1.03);
 }
 
-.opcao .nome {
+.opcao-multiplo.desabilitado {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.opcao .nome, .opcao-multiplo .nome {
     font-size: 1.05em;
     margin-bottom: 5px;
     font-weight: 600;
-}
-
-.opcao .descricao {
-    font-size: 0.8em;
-    color: var(--light-text);
-    margin-bottom: 5px;
-}
-
-.opcao .preco {
-    font-size: 0.95em;
-    color: var(--light-text);
-}
-
-.opcao.selecionado .preco {
-    color: var(--primary-color);
 }
 
 .resumo-pedido, .dados-cliente {

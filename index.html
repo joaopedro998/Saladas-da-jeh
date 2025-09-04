@@ -15,106 +15,46 @@
     <div class="container">
         <header>
             <div id="status-loja"></div>
-            <h1>🥗 Salada da Jeh</h1>
-            <p>Monte sua salada do seu jeito: fresca, saudável e deliciosa!</p>
+            <h1>🥗 Saladas da Jeh</h1>
+            <p>Monte sua salada: 1 Base + 1 Proteína + 3 Opcionais + 1 Molho.</p>
         </header>
 
-        <!-- Seção Saladas Prontas -->
-        <div class="secao-opcoes">
-            <h2><span class="numero-passo">⭐</span>Escolha uma Salada Pronta</h2>
-            <div class="opcoes-grid" id="saladas-prontas">
-                <div class="opcao" data-nome="Caesar com Frango" data-preco="25.00" data-descricao="Alface americana, frango grelhado, croutons, queijo parmesão e molho caesar.">
-                    <div class="nome">Caesar c/ Frango</div>
-                    <div class="descricao">Frango, croutons, parmesão</div>
-                    <div class="preco">R$ 25,00</div>
-                </div>
-                <div class="opcao" data-nome="Salada Fit" data-preco="23.00" data-descricao="Mix de folhas, tiras de carne, tomate cereja e molho italiano.">
-                    <div class="nome">Salada Fit</div>
-                    <div class="descricao">Carne, tomate cereja</div>
-                    <div class="preco">R$ 23,00</div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Seção Monte a Sua -->
         <div id="monte-sua-salada">
             <div class="secao-opcoes">
-                <h2><span class="numero-passo">1</span>Ou Monte a Sua: A Base</h2>
-                <div class="opcoes-grid" id="folhas">
-                    <div class="opcao" data-nome="Alface Americana" data-preco="8.00">
-                        <div class="nome">Alface Americana</div>
-                        <div class="preco">R$ 8,00</div>
-                    </div>
-                    <div class="opcao" data-nome="Mix de Folhas" data-preco="9.00">
-                        <div class="nome">Mix de Folhas</div>
-                        <div class="preco">R$ 9,00</div>
-                    </div>
-                    <div class="opcao" data-nome="Rúcula com Agrião" data-preco="8.50">
-                        <div class="nome">Rúcula c/ Agrião</div>
-                        <div class="preco">R$ 8,50</div>
-                    </div>
+                <h2><span class="numero-passo">1</span>Escolha 1 Base</h2>
+                <div class="opcoes-grid" id="bases">
+                    <div class="opcao" data-nome="Alface americana"><div class="nome">Alface americana</div></div>
+                    <div class="opcao" data-nome="Rúcula"><div class="nome">Rúcula</div></div>
+                    <div class="opcao" data-nome="Mix de folhas"><div class="nome">Mix de folhas</div></div>
                 </div>
             </div>
 
             <div class="secao-opcoes">
-                <h2><span class="numero-passo">2</span>Escolha uma Proteína</h2>
+                <h2><span class="numero-passo">2</span>Escolha 1 Proteína</h2>
                 <div class="opcoes-grid" id="proteinas">
-                    <div class="opcao" data-nome="Frango Grelhado" data-preco="10.00">
-                        <div class="nome">Frango Grelhado</div>
-                        <div class="preco">R$ 10,00</div>
-                    </div>
-                    <div class="opcao" data-nome="Tiras de Carne" data-preco="12.00">
-                        <div class="nome">Tiras de Carne</div>
-                        <div class="preco">R$ 12,00</div>
-                    </div>
-                    <div class="opcao" data-nome="Ovo de Codorna" data-preco="7.00">
-                        <div class="nome">Ovo de Codorna</div>
-                        <div class="preco">R$ 7,00</div>
-                    </div>
-                    <div class="opcao" data-nome="Grão de Bico" data-preco="8.00">
-                        <div class="nome">Grão de Bico</div>
-                        <div class="preco">R$ 8,00</div>
-                    </div>
+                    <div class="opcao" data-nome="Frango grelhado"><div class="nome">Frango grelhado</div></div>
+                    <div class="opcao" data-nome="Ovo cozido"><div class="nome">Ovo cozido</div></div>
+                    <div class="opcao" data-nome="Grão de bico"><div class="nome">Grão de bico</div></div>
                 </div>
             </div>
 
             <div class="secao-opcoes">
-                <h2><span class="numero-passo">3</span>Escolha o Molho</h2>
-                <div class="opcoes-grid" id="molhos">
-                    <div class="opcao" data-nome="Mostarda e Mel" data-preco="4.00">
-                        <div class="nome">Mostarda e Mel</div>
-                        <div class="preco">R$ 4,00</div>
-                    </div>
-                    <div class="opcao" data-nome="Caesar" data-preco="4.50">
-                        <div class="nome">Caesar</div>
-                        <div class="preco">R$ 4,50</div>
-                    </div>
-                    <div class="opcao" data-nome="Italiano" data-preco="4.00">
-                        <div class="nome">Italiano</div>
-                        <div class="preco">R$ 4,00</div>
-                    </div>
+                <h2><span class="numero-passo">3</span>Escolha 3 Opcionais <span id="contador-opcionais">(0/3)</span></h2>
+                <div class="opcoes-grid" id="opcionais">
+                    <div class="opcao-multiplo" data-nome="Tomate cereja"><div class="nome">Tomate cereja</div></div>
+                    <div class="opcao-multiplo" data-nome="Macarrão parafuso"><div class="nome">Macarrão parafuso</div></div>
+                    <div class="opcao-multiplo" data-nome="Torradinha"><div class="nome">Torradinha</div></div>
+                    <div class="opcao-multiplo" data-nome="Mussarela em cubos"><div class="nome">Mussarela em cubos</div></div>
+                    <div class="opcao-multiplo" data-nome="Cebola roxa"><div class="nome">Cebola roxa</div></div>
                 </div>
             </div>
-            
+
             <div class="secao-opcoes">
-                <h2><span class="numero-passo">4</span>Adicione Extras (Opcional)</h2>
-                <div class="opcoes-grid" id="extras">
-                    <div class="opcao" data-nome="Croutons" data-preco="2.50">
-                        <div class="nome">Croutons</div>
-                        <div class="preco">+ R$ 2,50</div>
-                    </div>
-                    <div class="opcao" data-nome="Bacon Bits" data-preco="3.50">
-                        <div class="nome">Bacon Bits</div>
-                        <div class="preco">+ R$ 3,50</div>
-                    </div>
-                    <div class="opcao" data-nome="Queijo Parmesão" data-preco="4.00">
-                        <div class="nome">Queijo Parmesão</div>
-                        <div class="preco">+ R$ 4,00</div>
-                    </div>
-                    <div class="opcao" data-nome="Tomate Cereja" data-preco="3.00">
-                        <div class="nome">Tomate Cereja</div>
-                        <div class="preco">+ R$ 3,00</div>
-                    </div>
+                <h2><span class="numero-passo">4</span>Escolha 1 Molho</h2>
+                <div class="opcoes-grid" id="molhos">
+                    <div class="opcao" data-nome="Mostarda e Mel"><div class="nome">Mostarda e Mel</div></div>
+                    <div class="opcao" data-nome="Queijo"><div class="nome">Queijo</div></div>
+                    <div class="opcao" data-nome="Iogurte com hortelã"><div class="nome">Iogurte com hortelã</div></div>
                 </div>
             </div>
         </div>
@@ -122,41 +62,30 @@
         <div class="secao-opcoes">
             <h2><span class="numero-passo">5</span>Entrega ou Retirada?</h2>
             <div class="opcoes-grid duas-colunas" id="metodo-entrega">
-                <div class="opcao selecionado" data-metodo="entrega">
-                    <div class="nome">🛵 Entrega</div>
-                </div>
-                <div class="opcao" data-metodo="retirada">
-                    <div class="nome">🛍️ Retirada</div>
-                </div>
+                <div class="opcao selecionado" data-metodo="entrega"><div class="nome">🛵 Entrega</div></div>
+                <div class="opcao" data-metodo="retirada"><div class="nome">🛍️ Retirada</div></div>
             </div>
         </div>
         
-        <!-- NOVA Seção Forma de Pagamento -->
         <div class="secao-opcoes">
             <h2><span class="numero-passo">6</span>Forma de Pagamento</h2>
             <div class="opcoes-grid" id="forma-pagamento">
-                <div class="opcao" data-pagamento="PIX">
-                    <div class="nome">PIX</div>
-                </div>
-                <div class="opcao" data-pagamento="Cartão">
-                    <div class="nome">Cartão</div>
-                </div>
-                <div class="opcao" data-pagamento="Dinheiro">
-                    <div class="nome">Dinheiro</div>
-                </div>
+                <div class="opcao" data-pagamento="PIX"><div class="nome">PIX</div></div>
+                <div class="opcao" data-pagamento="Cartão"><div class="nome">Cartão</div></div>
+                <div class="opcao" data-pagamento="Dinheiro"><div class="nome">Dinheiro</div></div>
             </div>
         </div>
 
         <div class="dados-cliente">
-             <h3><span class="numero-passo">✓</span>Seus Dados</h3>
-             <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
-             <div id="campo-endereco">
+            <h3><span class="numero-passo">✓</span>Seus Dados</h3>
+            <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
+            <div id="campo-endereco">
                 <input type="text" id="endereco-cliente" placeholder="Seu endereço para entrega" required>
-             </div>
-             <div id="campo-troco">
+            </div>
+            <div id="campo-troco">
                 <input type="text" id="troco" placeholder="Precisa de troco para quanto?">
-             </div>
-             <textarea id="observacoes" placeholder="Observações do pedido (ex: sem cebola, ponto da carne, etc)"></textarea>
+            </div>
+            <textarea id="observacoes" placeholder="Observações do pedido (ex: sem cebola, etc)"></textarea>
         </div>
 
         <div class="resumo-pedido">
@@ -168,7 +97,7 @@
         <p id="mensagem-erro"></p>
         
         <button class="botao-finalizar" id="btn-finalizar" onclick="enviarPedido()">
-             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
             Finalizar e Pedir pelo WhatsApp
         </button>
     </div>

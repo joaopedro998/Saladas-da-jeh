@@ -2,8 +2,8 @@
 const PRECO_FIXO_SALADA = 15.00;
 const LIMITE_OPCIONAIS = 3;
 const TAXA_ENTREGA = 7.00; // Mantenha ou altere conforme necessário
-const HORA_ABERTURA = 11; // 11:00
-const HORA_FECHAMENTO = 22; // 22:00
+const HORA_ABERTURA = 0; // 11:00
+const HORA_FECHAMENTO = 24; // 22:00
 const NUMERO_WHATSAPP = '5535999280299'; // Insira seu número aqui
 
 // --- ESTADO DO PEDIDO ---

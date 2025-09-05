@@ -149,6 +149,61 @@ header p {
     font-weight: 600;
 }
 
+/* Estilos para a nova seção do carrinho */
+#secao-carrinho {
+    background-color: #fdfdfd;
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+#secao-carrinho h3 {
+    margin-top: 0;
+    font-size: 1.3em;
+}
+
+#lista-carrinho {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+#lista-carrinho li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px dashed #ddd;
+}
+
+#lista-carrinho li:last-child {
+    border-bottom: none;
+}
+
+#lista-carrinho .detalhes-salada {
+    font-size: 0.9em;
+    color: var(--light-text);
+}
+
+.btn-remover {
+    background-color: var(--red-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    margin-left: 15px;
+}
+
+.btn-remover:hover {
+    background-color: #a72525;
+}
+
+
 .resumo-pedido, .dados-cliente {
     background-color: #fdfdfd;
     border: 2px solid var(--border-color);
@@ -163,23 +218,6 @@ header p {
     font-size: 1.3em;
     display: flex;
     align-items: center;
-}
-
-#lista-resumo {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-#lista-resumo li {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 0;
-    border-bottom: 1px dashed #ddd;
-}
-
-#lista-resumo li:last-child {
-    border-bottom: none;
 }
 
 #total-pedido {
@@ -217,7 +255,26 @@ input[type="text"]:focus, textarea:focus {
 }
 
 #campo-troco {
-    display: none; /* Começa escondido */
+    display: none;
+}
+
+.botao-adicionar {
+    width: 100%;
+    padding: 16px;
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.25em;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: all 0.3s;
+}
+
+.botao-adicionar:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
 }
 
 .botao-finalizar {
@@ -258,5 +315,9 @@ input[type="text"]:focus, textarea:focus {
     text-align: center;
     margin-top: 15px;
     font-weight: 600;
+    display: none;
+}
+
+.hidden {
     display: none;
 }

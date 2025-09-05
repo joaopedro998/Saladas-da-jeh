@@ -58,48 +58,59 @@
                 </div>
             </div>
         </div>
-        
-        <div class="secao-opcoes">
-            <h2><span class="numero-passo">5</span>Entrega ou Retirada?</h2>
-            <div class="opcoes-grid duas-colunas" id="metodo-entrega">
-                <div class="opcao selecionado" data-metodo="entrega"><div class="nome">🛵 Entrega</div></div>
-                <div class="opcao" data-metodo="retirada"><div class="nome">🛍️ Retirada</div></div>
-            </div>
-        </div>
-        
-        <div class="secao-opcoes">
-            <h2><span class="numero-passo">6</span>Forma de Pagamento</h2>
-            <div class="opcoes-grid" id="forma-pagamento">
-                <div class="opcao" data-pagamento="PIX"><div class="nome">PIX</div></div>
-                <div class="opcao" data-pagamento="Cartão"><div class="nome">Cartão</div></div>
-                <div class="opcao" data-pagamento="Dinheiro"><div class="nome">Dinheiro</div></div>
-            </div>
-        </div>
 
-        <div class="dados-cliente">
-            <h3><span class="numero-passo">✓</span>Seus Dados</h3>
-            <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
-            <div id="campo-endereco">
-                <input type="text" id="endereco-cliente" placeholder="Seu endereço para entrega" required>
-            </div>
-            <div id="campo-troco">
-                <input type="text" id="troco" placeholder="Precisa de troco para quanto?">
-            </div>
-            <textarea id="observacoes" placeholder="Observações do pedido (ex: sem cebola, etc)"></textarea>
-        </div>
-
-        <div class="resumo-pedido">
-            <h3>🛒 Resumo do seu Pedido</h3>
-            <ul id="lista-resumo"></ul>
-            <div id="total-pedido">Total: R$ 0,00</div>
-        </div>
-        
-        <p id="mensagem-erro"></p>
-        
-        <button class="botao-finalizar" id="btn-finalizar" onclick="enviarPedido()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-            Finalizar e Pedir pelo WhatsApp
+        <button class="botao-adicionar" id="btn-adicionar-carrinho" disabled>
+            Adicionar Salada ao Carrinho
         </button>
+        
+        <div id="secao-carrinho" class="hidden">
+            <h3>🛒 Meu Carrinho</h3>
+            <ul id="lista-carrinho">
+                </ul>
+        </div>
+        
+        <div id="secao-finalizar" class="hidden">
+            <div class="secao-opcoes">
+                <h2><span class="numero-passo">✓</span>Entrega ou Retirada?</h2>
+                <div class="opcoes-grid duas-colunas" id="metodo-entrega">
+                    <div class="opcao selecionado" data-metodo="entrega"><div class="nome">🛵 Entrega</div></div>
+                    <div class="opcao" data-metodo="retirada"><div class="nome">🛍️ Retirada</div></div>
+                </div>
+            </div>
+            
+            <div class="secao-opcoes">
+                <h2><span class="numero-passo">✓</span>Forma de Pagamento</h2>
+                <div class="opcoes-grid" id="forma-pagamento">
+                    <div class="opcao" data-pagamento="PIX"><div class="nome">PIX</div></div>
+                    <div class="opcao" data-pagamento="Cartão"><div class="nome">Cartão</div></div>
+                    <div class="opcao" data-pagamento="Dinheiro"><div class="nome">Dinheiro</div></div>
+                </div>
+            </div>
+
+            <div class="dados-cliente">
+                <h3><span class="numero-passo">✓</span>Seus Dados</h3>
+                <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
+                <div id="campo-endereco">
+                    <input type="text" id="endereco-cliente" placeholder="Seu endereço para entrega" required>
+                </div>
+                <div id="campo-troco">
+                    <input type="text" id="troco" placeholder="Precisa de troco para quanto?">
+                </div>
+                <textarea id="observacoes" placeholder="Observações gerais do pedido (ex: sem cebola na salada 2)"></textarea>
+            </div>
+
+            <div class="resumo-pedido">
+                <h3>🧾 Resumo Final do Pedido</h3>
+                <div id="total-pedido">Total: R$ 0,00</div>
+            </div>
+            
+            <p id="mensagem-erro"></p>
+            
+            <button class="botao-finalizar" id="btn-finalizar">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                Finalizar e Pedir pelo WhatsApp
+            </button>
+        </div>
     </div>
 
     <script src="script.js"></script>

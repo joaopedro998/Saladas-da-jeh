@@ -96,6 +96,14 @@ header p {
     margin-right: 12px;
 }
 
+/* NOVO: Estilo para o subtítulo do tipo de cartão */
+#opcoes-cartao h4 {
+    font-size: 1.1em;
+    color: var(--dark-text);
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+
 #contador-opcionais {
     margin-left: 10px;
     font-size: 0.8em;
@@ -228,7 +236,7 @@ header p {
     color: var(--primary-color);
 }
 
-input[type="text"], textarea {
+input[type="text"], input[type="number"], textarea {
     width: 100%;
     padding: 14px;
     border: 2px solid var(--border-color);
@@ -245,21 +253,49 @@ textarea {
     min-height: 80px;
 }
 
-input[type="text"]:focus, textarea:focus {
+input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
     outline: none;
     border-color: var(--primary-color);
 }
 
-#campo-endereco, #campo-troco {
+#campo-endereco {
     transition: all 0.3s ease;
 }
 
-#campo-troco {
+#campo-troco.hidden, #opcoes-cartao.hidden {
     display: none;
 }
 
+/* NOVO: Container para o controle de quantidade e botão adicionar */
+.controle-adicionar {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+/* NOVO: Estilos para o campo de quantidade */
+.controle-quantidade {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+.controle-quantidade label {
+    font-size: 0.9em;
+    font-weight: 600;
+    color: var(--light-text);
+}
+.controle-quantidade input[type="number"] {
+    max-width: 80px;
+    padding: 14px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
 .botao-adicionar {
-    width: 100%;
+    flex-grow: 1; /* Faz o botão ocupar o espaço restante */
     padding: 16px;
     background: var(--primary-color);
     color: white;
@@ -268,9 +304,10 @@ input[type="text"]:focus, textarea:focus {
     font-size: 1.25em;
     font-weight: 600;
     cursor: pointer;
-    margin-top: 30px;
     transition: all 0.3s;
+    margin-top: 0; /* Removido pois agora está no flex container */
 }
+
 
 .botao-adicionar:disabled {
     background-color: #ccc;

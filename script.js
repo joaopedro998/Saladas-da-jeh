@@ -17,6 +17,7 @@ let saladaAtual = {
 let dadosPedido = {
     metodoEntrega: 'entrega',
     formaPagamento: null,
+    tipoCartao: null, // NOVO: para Crédito ou Débito
 };
 
 // --- ELEMENTOS DO DOM ---
@@ -32,6 +33,8 @@ const todosOpcionaisEl = document.querySelectorAll('#opcionais .opcao-multiplo')
 const mensagemErroEl = document.getElementById('mensagem-erro');
 const campoEnderecoEl = document.getElementById('campo-endereco');
 const campoTrocoEl = document.getElementById('campo-troco');
+const campoOpcoesCartaoEl = document.getElementById('opcoes-cartao'); // NOVO
+const quantidadeSaladaEl = document.getElementById('quantidade-salada'); // NOVO
 
 
 // --- FUNÇÕES DE LÓGICA ---
@@ -42,6 +45,7 @@ function resetarSelecaoAtual() {
     document.querySelectorAll('.opcao.selecionado, .opcao-multiplo.selecionado').forEach(el => {
         el.classList.remove('selecionado');
     });
+    quantidadeSaladaEl.value = 1; // Reseta a quantidade
     atualizarContadorOpcionais();
     verificarSaladaCompleta();
 }
@@ -88,9 +92,31 @@ function atualizarContadorOpcionais() {
     });
 }
 
-// Adiciona a salada montada ao carrinho
+// ALTERADO: Adiciona a salada montada ao carrinho, agora com quantidade
 function adicionarAoCarrinho() {
-    carrinho.push({ ...saladaAtual });
+    const quantidade = parseInt(quantidadeSaladaEl.value);
+    if (quantidade < 1) return;
+
+    // Cria um ID único para a combinação de salada para agrupar itens iguais
+    const idSalada = [
+        saladaAtual.base,
+        saladaAtual.proteina,
+        saladaAtual.molho,
+        ...saladaAtual.opcionais.sort()
+    ].join('-');
+
+    const itemExistente = carrinho.find(item => item.id === idSalada);
+
+    if (itemExistente) {
+        itemExistente.quantidade += quantidade;
+    } else {
+        carrinho.push({
+            id: idSalada,
+            salada: { ...saladaAtual },
+            quantidade: quantidade
+        });
+    }
+
     resetarSelecaoAtual();
     renderizarCarrinho();
 }
@@ -101,7 +127,7 @@ function removerDoCarrinho(index) {
     renderizarCarrinho();
 }
 
-// Desenha o carrinho na tela e calcula o total
+// ALTERADO: Desenha o carrinho na tela e calcula o total
 function renderizarCarrinho() {
     listaCarrinhoEl.innerHTML = '';
     if (carrinho.length > 0) {
@@ -112,14 +138,14 @@ function renderizarCarrinho() {
         secaoFinalizar.classList.add('hidden');
     }
 
-    carrinho.forEach((salada, index) => {
+    carrinho.forEach((item, index) => {
         const li = document.createElement('li');
-        const opcionaisStr = salada.opcionais.join(', ');
+        const opcionaisStr = item.salada.opcionais.join(', ');
         li.innerHTML = `
             <div>
-                <strong>Salada ${index + 1}</strong>
+                <strong>${item.quantidade}x Salada</strong>
                 <div class="detalhes-salada">
-                    ${salada.base}, ${salada.proteina}, ${opcionaisStr}, Molho ${salada.molho}
+                    ${item.salada.base}, ${item.salada.proteina}, ${opcionaisStr}, Molho ${item.salada.molho}
                 </div>
             </div>
             <button class="btn-remover" data-index="${index}">X</button>
@@ -127,7 +153,6 @@ function renderizarCarrinho() {
         listaCarrinhoEl.appendChild(li);
     });
 
-    // Adiciona evento de clique para os novos botões de remover
     document.querySelectorAll('.btn-remover').forEach(btn => {
         btn.addEventListener('click', (e) => {
             removerDoCarrinho(parseInt(e.target.dataset.index));
@@ -137,14 +162,18 @@ function renderizarCarrinho() {
     atualizarTotalPedido();
 }
 
+// ALTERADO: Atualiza o total do pedido com base na quantidade
 function atualizarTotalPedido() {
-    let total = carrinho.length * PRECO_FIXO_SALADA;
+    const totalSaladas = carrinho.reduce((acc, item) => acc + (item.quantidade * PRECO_FIXO_SALADA), 0);
+    let totalFinal = totalSaladas;
+
     if (dadosPedido.metodoEntrega === 'entrega' && carrinho.length > 0) {
-        total += TAXA_ENTREGA;
+        totalFinal += TAXA_ENTREGA;
     }
     const formatarMoeda = (valor) => valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    totalPedidoEl.innerText = `Total: ${formatarMoeda(total)}`;
+    totalPedidoEl.innerText = `Total: ${formatarMoeda(totalFinal)}`;
 }
+
 
 // --- LÓGICA FINAL DO PEDIDO ---
 
@@ -156,21 +185,44 @@ function selecionarMetodoEntrega(elemento) {
     atualizarTotalPedido();
 }
 
+// ALTERADO: Mostra ou esconde as opções de cartão
 function selecionarFormaPagamento(elemento) {
     dadosPedido.formaPagamento = elemento.dataset.pagamento;
     document.querySelectorAll('#forma-pagamento .opcao').forEach(opt => opt.classList.remove('selecionado'));
     elemento.classList.add('selecionado');
-    campoTrocoEl.style.display = (dadosPedido.formaPagamento === 'Dinheiro') ? 'block' : 'none';
+
+    campoTrocoEl.classList.toggle('hidden', dadosPedido.formaPagamento !== 'Dinheiro');
+    campoOpcoesCartaoEl.classList.toggle('hidden', dadosPedido.formaPagamento !== 'Cartão');
+
+    // Se o pagamento não for cartão, reseta a escolha do tipo de cartão
+    if (dadosPedido.formaPagamento !== 'Cartão') {
+        dadosPedido.tipoCartao = null;
+        document.querySelectorAll('#tipo-cartao .opcao').forEach(opt => opt.classList.remove('selecionado'));
+    }
 }
 
+// NOVO: Seleciona o tipo de cartão
+function selecionarTipoCartao(elemento) {
+    dadosPedido.tipoCartao = elemento.dataset.tipo;
+    document.querySelectorAll('#tipo-cartao .opcao').forEach(opt => opt.classList.remove('selecionado'));
+    elemento.classList.add('selecionado');
+}
+
+// ALTERADO: Envia o pedido, agora com as novas informações
 function enviarPedido() {
     const nomeCliente = document.getElementById('nome-cliente').value.trim();
     const enderecoCliente = document.getElementById('endereco-cliente').value.trim();
     mensagemErroEl.style.display = 'none';
 
+    // Validações
     if (carrinho.length === 0) return;
     if (!dadosPedido.formaPagamento) {
         mensagemErroEl.innerText = 'Por favor, escolha uma forma de pagamento.';
+        mensagemErroEl.style.display = 'block';
+        return;
+    }
+    if (dadosPedido.formaPagamento === 'Cartão' && !dadosPedido.tipoCartao) {
+        mensagemErroEl.innerText = 'Por favor, escolha Crédito ou Débito.';
         mensagemErroEl.style.display = 'block';
         return;
     }
@@ -186,32 +238,42 @@ function enviarPedido() {
     }
 
     // Montagem da Mensagem
-    let total = carrinho.length * PRECO_FIXO_SALADA;
+    let totalSaladas = carrinho.reduce((acc, item) => acc + item.quantidade, 0);
+    let subtotal = totalSaladas * PRECO_FIXO_SALADA;
+
     let mensagem = `Olá, *Salada da Jeh*! 🥗\n\nGostaria de fazer um novo pedido:\n\n`;
     
-    carrinho.forEach((salada, index) => {
-        mensagem += `*🥗 SALADA ${index + 1}*\n`;
-        mensagem += `*- Base:* ${salada.base}\n`;
-        mensagem += `*- Proteína:* ${salada.proteina}\n`;
-        mensagem += `*- Opcionais:* ${salada.opcionais.join(', ')}\n`;
-        mensagem += `*- Molho:* ${salada.molho}\n\n`;
+    carrinho.forEach((item) => {
+        mensagem += `*🥗 ${item.quantidade}x SALADA*\n`;
+        mensagem += `*- Base:* ${item.salada.base}\n`;
+        mensagem += `*- Proteína:* ${item.salada.proteina}\n`;
+        mensagem += `*- Opcionais:* ${item.salada.opcionais.join(', ')}\n`;
+        mensagem += `*- Molho:* ${item.salada.molho}\n\n`;
     });
 
     mensagem += `----------------------\n`;
     mensagem += `*Cliente:* ${nomeCliente}\n`;
     mensagem += `*Método:* ${dadosPedido.metodoEntrega === 'entrega' ? `Entrega 🛵\n*Endereço:* ${enderecoCliente}` : 'Retirada no local 🛍️'}\n`;
-    mensagem += `*Pagamento:* ${dadosPedido.formaPagamento}\n`;
+    
+    let pagamentoStr = dadosPedido.formaPagamento;
+    if (pagamentoStr === 'Cartão') {
+        pagamentoStr += ` (${dadosPedido.tipoCartao})`;
+    }
+    mensagem += `*Pagamento:* ${pagamentoStr}\n`;
+
     const troco = document.getElementById('troco').value.trim();
-    if (dadosPedido.formaPagamento === 'Dinheiro' && troco !== '') {
+    if (dadosPedido.formaPagamento === 'Dinheiro' && troco) {
         mensagem += `*Troco para:* R$ ${troco}\n`;
     }
     const observacoes = document.getElementById('observacoes').value.trim();
-    if (observacoes !== '') {
+    if (observacoes) {
         mensagem += `\n*Observações:* ${observacoes}\n`;
     }
-
-    if (dadosPedido.metodoEntrega === 'entrega') total += TAXA_ENTREGA;
-    mensagem += `----------------------\n*TOTAL:* R$ ${total.toFixed(2).replace('.', ',')}\n\n`;
+    
+    let totalFinal = subtotal;
+    if (dadosPedido.metodoEntrega === 'entrega') totalFinal += TAXA_ENTREGA;
+    
+    mensagem += `----------------------\n*TOTAL:* R$ ${totalFinal.toFixed(2).replace('.', ',')}\n\n`;
     mensagem += `Aguardo a confirmação do meu pedido. Obrigado!`;
 
     const linkWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
@@ -236,7 +298,6 @@ function verificarStatusLoja() {
 }
 
 // --- INICIALIZAÇÃO E EVENTOS ---
-
 document.addEventListener('DOMContentLoaded', () => {
     verificarStatusLoja();
     resetarSelecaoAtual();
@@ -250,6 +311,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Eventos para o pedido final
     document.querySelectorAll('#metodo-entrega .opcao').forEach(el => el.addEventListener('click', () => selecionarMetodoEntrega(el)));
     document.querySelectorAll('#forma-pagamento .opcao').forEach(el => el.addEventListener('click', () => selecionarFormaPagamento(el)));
+    document.querySelectorAll('#tipo-cartao .opcao').forEach(el => el.addEventListener('click', () => selecionarTipoCartao(el))); // NOVO
     
     // Eventos dos botões principais
     btnAdicionarCarrinho.addEventListener('click', adicionarAoCarrinho);

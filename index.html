@@ -58,15 +58,21 @@
                 </div>
             </div>
         </div>
-
-        <button class="botao-adicionar" id="btn-adicionar-carrinho" disabled>
-            Adicionar Salada ao Carrinho
-        </button>
+        
+        <div class="controle-adicionar">
+            <div class="controle-quantidade">
+                <label for="quantidade-salada">Quantidade:</label>
+                <input type="number" id="quantidade-salada" value="1" min="1" step="1">
+            </div>
+            <button class="botao-adicionar" id="btn-adicionar-carrinho" disabled>
+                Adicionar Salada ao Carrinho
+            </button>
+        </div>
         
         <div id="secao-carrinho" class="hidden">
             <h3>🛒 Meu Carrinho</h3>
             <ul id="lista-carrinho">
-                </ul>
+            </ul>
         </div>
         
         <div id="secao-finalizar" class="hidden">
@@ -87,13 +93,21 @@
                 </div>
             </div>
 
+            <div id="opcoes-cartao" class="secao-opcoes hidden">
+                <h4>Qual tipo de cartão?</h4>
+                <div class="opcoes-grid duas-colunas" id="tipo-cartao">
+                    <div class="opcao" data-tipo="Crédito"><div class="nome">Crédito</div></div>
+                    <div class="opcao" data-tipo="Débito"><div class="nome">Débito</div></div>
+                </div>
+            </div>
+
             <div class="dados-cliente">
                 <h3><span class="numero-passo">✓</span>Seus Dados</h3>
                 <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
                 <div id="campo-endereco">
                     <input type="text" id="endereco-cliente" placeholder="Seu endereço para entrega" required>
                 </div>
-                <div id="campo-troco">
+                <div id="campo-troco" class="hidden">
                     <input type="text" id="troco" placeholder="Precisa de troco para quanto?">
                 </div>
                 <textarea id="observacoes" placeholder="Observações gerais do pedido (ex: sem cebola na salada 2)"></textarea>

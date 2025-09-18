@@ -94,9 +94,9 @@ header p {
     align-items: center;
     font-size: 0.8em;
     margin-right: 12px;
+    flex-shrink: 0; /* Impede que o número encolha */
 }
 
-/* NOVO: Estilo para o subtítulo do tipo de cartão */
 #opcoes-cartao h4 {
     font-size: 1.1em;
     color: var(--dark-text);
@@ -121,7 +121,7 @@ header p {
     grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
 }
 
-.opcao, .opcao-multiplo {
+.opcao, .opcao-multiplo, .opcao-extra {
     border: 2px solid var(--border-color);
     border-radius: 12px;
     padding: 15px;
@@ -129,15 +129,18 @@ header p {
     cursor: pointer;
     transition: all 0.2s ease-in-out;
     background-color: #fff;
+    display: flex; /* Adicionado para alinhar nome e preço */
+    flex-direction: column; /* Adicionado para alinhar nome e preço */
+    justify-content: center; /* Adicionado para alinhar nome e preço */
 }
 
-.opcao:hover, .opcao-multiplo:hover {
+.opcao:hover, .opcao-multiplo:hover, .opcao-extra:hover {
     transform: translateY(-4px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     border-color: var(--secondary-color);
 }
 
-.opcao.selecionado, .opcao-multiplo.selecionado {
+.opcao.selecionado, .opcao-multiplo.selecionado, .opcao-extra.selecionado {
     background-color: #eaf1ea;
     border-color: var(--primary-color);
     color: var(--primary-color);
@@ -151,13 +154,22 @@ header p {
     pointer-events: none;
 }
 
-.opcao .nome, .opcao-multiplo .nome {
+.opcao .nome, .opcao-multiplo .nome, .opcao-extra .nome {
     font-size: 1.05em;
-    margin-bottom: 5px;
     font-weight: 600;
 }
 
-/* Estilos para a nova seção do carrinho */
+/* NOVO: Estilo para o preço do extra */
+.opcao-extra .preco-extra {
+    font-size: 0.9em;
+    color: var(--secondary-color);
+    font-weight: 600;
+    margin-top: 5px;
+}
+.opcao-extra.selecionado .preco-extra {
+    color: var(--primary-color);
+}
+
 #secao-carrinho {
     background-color: #fdfdfd;
     border: 2px solid var(--border-color);
@@ -266,7 +278,6 @@ input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
     display: none;
 }
 
-/* NOVO: Container para o controle de quantidade e botão adicionar */
 .controle-adicionar {
     display: flex;
     align-items: center;
@@ -274,7 +285,6 @@ input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
     margin-top: 30px;
 }
 
-/* NOVO: Estilos para o campo de quantidade */
 .controle-quantidade {
     display: flex;
     flex-direction: column;
@@ -295,7 +305,7 @@ input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
 }
 
 .botao-adicionar {
-    flex-grow: 1; /* Faz o botão ocupar o espaço restante */
+    flex-grow: 1;
     padding: 16px;
     background: var(--primary-color);
     color: white;
@@ -305,7 +315,7 @@ input[type="text"]:focus, input[type="number"]:focus, textarea:focus {
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s;
-    margin-top: 0; /* Removido pois agora está no flex container */
+    margin-top: 0;
 }
 
 

@@ -16,10 +16,14 @@
         <header>
             <div id="status-loja"></div>
             <h1>🥗 Saladas da Jeh</h1>
-            <p>Monte sua salada: 1 Base + 1 Proteína + 3 Opcionais + 1 Molho.</p>
+            <p>Monte sua salada ou escolha um de nossos sucos naturais.</p>
         </header>
 
         <div id="monte-sua-salada">
+            <div class="secao-opcoes">
+                <h2><span class="numero-passo">🥗</span>Monte sua Salada</h2>
+                <p class="instrucao-opcionais">1 Base + 1 Proteína + 3 Opcionais Grátis + 1 Molho.</p>
+            </div>
             <div class="secao-opcoes">
                 <h2><span class="numero-passo">1</span>Escolha 1 Base</h2>
                 <div class="opcoes-grid" id="bases">
@@ -28,7 +32,6 @@
                     <div class="opcao" data-nome="Mix de folhas"><div class="nome">Mix de folhas</div></div>
                 </div>
             </div>
-
             <div class="secao-opcoes">
                 <h2><span class="numero-passo">2</span>Escolha 1 Proteína</h2>
                 <div class="opcoes-grid" id="proteinas">
@@ -37,58 +40,23 @@
                     <div class="opcao" data-nome="Grão de bico"><div class="nome">Grão de bico</div></div>
                 </div>
             </div>
-
             <div class="secao-opcoes">
                 <h2><span class="numero-passo">3</span>Escolha seus Opcionais <span id="contador-opcionais">(0 selecionados)</span></h2>
                 <p class="instrucao-opcionais">Os 3 primeiros são grátis. A partir do quarto, ou em doses duplas, cada item custa R$ 1,00.</p>
                 <div class="opcoes-grid-quantia" id="opcionais">
-                    <div class="opcao-quantia" data-nome="Tomate cereja">
-                        <div class="nome-opcao">Tomate cereja</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Macarrão parafuso">
-                        <div class="nome-opcao">Macarrão parafuso</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Torradinha">
-                        <div class="nome-opcao">Torradinha</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Mussarela em cubos">
-                        <div class="nome-opcao">Mussarela em cubos</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Cebola roxa">
-                        <div class="nome-opcao">Cebola roxa</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Repolho">
-                        <div class="nome-opcao">Repolho</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Pepino">
-                        <div class="nome-opcao">Pepino</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Cenoura">
-                        <div class="nome-opcao">Cenoura</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Rabanete">
-                        <div class="nome-opcao">Rabanete</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Milho">
-                        <div class="nome-opcao">Milho</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
-                    <div class="opcao-quantia" data-nome="Azeitona">
-                        <div class="nome-opcao">Azeitona</div>
-                        <div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div>
-                    </div>
+                    <div class="opcao-quantia" data-nome="Tomate cereja"><div class="nome-opcao">Tomate cereja</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Macarrão parafuso"><div class="nome-opcao">Macarrão parafuso</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Torradinha"><div class="nome-opcao">Torradinha</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Mussarela em cubos"><div class="nome-opcao">Mussarela em cubos</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Cebola roxa"><div class="nome-opcao">Cebola roxa</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Repolho"><div class="nome-opcao">Repolho</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Pepino"><div class="nome-opcao">Pepino</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Cenoura"><div class="nome-opcao">Cenoura</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Rabanete"><div class="nome-opcao">Rabanete</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Milho"><div class="nome-opcao">Milho</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
+                    <div class="opcao-quantia" data-nome="Azeitona"><div class="nome-opcao">Azeitona</div><div class="controle-item"><button class="btn-item-menos" disabled>-</button><span class="quantidade-item">0</span><button class="btn-item-mais">+</button></div></div>
                 </div>
             </div>
-
             <div class="secao-opcoes">
                 <h2><span class="numero-passo">4</span>Escolha 1 Molho</h2>
                 <div class="opcoes-grid" id="molhos">
@@ -97,44 +65,58 @@
                     <div class="opcao" data-nome="Iogurte com hortelã"><div class="nome">Iogurte com hortelã</div></div>
                 </div>
             </div>
-            
             <div class="secao-opcoes">
-                <h2><span class="numero-passo">+</span>Extras (Opcional)</h2>
+                <h2><span class="numero-passo">+</span>Extras da Salada (Opcional)</h2>
                 <div class="opcoes-grid" id="extras">
-                     <div class="opcao-extra" data-nome="Palmito" data-preco="3.00">
-                        <div class="nome">Palmito</div>
-                        <div class="preco-extra">+ R$ 3,00</div>
-                    </div>
-                    <div class="opcao-extra" data-nome="Castanha" data-preco="3.00">
-                        <div class="nome">Castanha</div>
-                        <div class="preco-extra">+ R$ 3,00</div>
-                    </div>
-                    <div class="opcao-extra" data-nome="Ovo" data-preco="2.00">
-                        <div class="nome">Ovo</div>
-                        <div class="preco-extra">+ R$ 2,00</div>
-                    </div>
-                    <div class="opcao-extra" data-nome="Frango" data-preco="2.50">
-                        <div class="nome">Frango</div>
-                        <div class="preco-extra">+ R$ 2,50</div>
-                    </div>
+                     <div class="opcao-extra" data-nome="Palmito" data-preco="3.00"><div class="nome">Palmito</div><div class="preco-extra">+ R$ 3,00</div></div>
+                    <div class="opcao-extra" data-nome="Castanha" data-preco="3.00"><div class="nome">Castanha</div><div class="preco-extra">+ R$ 3,00</div></div>
+                    <div class="opcao-extra" data-nome="Ovo" data-preco="2.00"><div class="nome">Ovo</div><div class="preco-extra">+ R$ 2,00</div></div>
+                    <div class="opcao-extra" data-nome="Frango" data-preco="2.50"><div class="nome">Frango</div><div class="preco-extra">+ R$ 2,50</div></div>
+                </div>
+            </div>
+            <div class="controle-adicionar">
+                <div class="controle-quantidade">
+                    <label for="quantidade-salada">Quantidade:</label>
+                    <input type="number" id="quantidade-salada" value="1" min="1" step="1">
+                </div>
+                <button class="botao-adicionar" id="btn-adicionar-carrinho" disabled>Adicionar Salada ao Carrinho</button>
+            </div>
+        </div>
+        
+        <div class="secao-opcoes">
+            <h2><span class="numero-passo">🍹</span>Sucos Naturais</h2>
+            <div id="lista-sucos">
+                <div class="item-produto" data-nome="Açaí com morango" data-preco="13.00">
+                    <div class="nome-produto">Açaí com morango</div>
+                    <div class="preco-produto">R$ 13,00</div>
+                    <button class="btn-adicionar-produto">+</button>
+                </div>
+                <div class="item-produto" data-nome="Maracujá" data-preco="13.00">
+                    <div class="nome-produto">Maracujá</div>
+                    <div class="preco-produto">R$ 13,00</div>
+                    <button class="btn-adicionar-produto">+</button>
+                </div>
+                <div class="item-produto" data-nome="Acerola com laranja" data-preco="13.00">
+                    <div class="nome-produto">Acerola com laranja</div>
+                    <div class="preco-produto">R$ 13,00</div>
+                    <button class="btn-adicionar-produto">+</button>
+                </div>
+                <div class="item-produto" data-nome="Abacaxi com hortelã" data-preco="13.00">
+                    <div class="nome-produto">Abacaxi com hortelã</div>
+                    <div class="preco-produto">R$ 13,00</div>
+                    <button class="btn-adicionar-produto">+</button>
+                </div>
+                <div class="item-produto" data-nome="Detox" data-preco="15.00">
+                    <div class="nome-produto">Detox</div>
+                    <div class="preco-produto">R$ 15,00</div>
+                    <button class="btn-adicionar-produto">+</button>
                 </div>
             </div>
         </div>
         
-        <div class="controle-adicionar">
-            <div class="controle-quantidade">
-                <label for="quantidade-salada">Quantidade:</label>
-                <input type="number" id="quantidade-salada" value="1" min="1" step="1">
-            </div>
-            <button class="botao-adicionar" id="btn-adicionar-carrinho" disabled>
-                Adicionar Salada ao Carrinho
-            </button>
-        </div>
-        
         <div id="secao-carrinho" class="hidden">
             <h3>🛒 Meu Carrinho</h3>
-            <ul id="lista-carrinho">
-            </ul>
+            <ul id="lista-carrinho"></ul>
         </div>
         
         <div id="secao-finalizar" class="hidden">
@@ -145,7 +127,6 @@
                     <div class="opcao" data-metodo="retirada"><div class="nome">🛍️ Retirada</div></div>
                 </div>
             </div>
-            
             <div class="secao-opcoes">
                 <h2><span class="numero-passo">✓</span>Forma de Pagamento</h2>
                 <div class="opcoes-grid" id="forma-pagamento">
@@ -154,7 +135,6 @@
                     <div class="opcao" data-pagamento="Dinheiro"><div class="nome">Dinheiro</div></div>
                 </div>
             </div>
-
             <div id="opcoes-cartao" class="secao-opcoes hidden">
                 <h4>Qual tipo de cartão?</h4>
                 <div class="opcoes-grid duas-colunas" id="tipo-cartao">
@@ -162,7 +142,6 @@
                     <div class="opcao" data-tipo="Débito"><div class="nome">Débito</div></div>
                 </div>
             </div>
-
             <div class="dados-cliente">
                 <h3><span class="numero-passo">✓</span>Seus Dados</h3>
                 <input type="text" id="nome-cliente" placeholder="Seu nome completo" required>
@@ -172,23 +151,19 @@
                 <div id="campo-troco" class="hidden">
                     <input type="text" id="troco" placeholder="Precisa de troco para quanto?">
                 </div>
-                <textarea id="observacoes" placeholder="Observações gerais do pedido (ex: sem cebola na salada 2)"></textarea>
+                <textarea id="observacoes" placeholder="Observações gerais do pedido"></textarea>
             </div>
-
             <div class="resumo-pedido">
                 <h3>🧾 Resumo Final do Pedido</h3>
                 <div id="total-pedido">Total: R$ 0,00</div>
             </div>
-            
             <p id="mensagem-erro"></p>
-            
             <button class="botao-finalizar" id="btn-finalizar">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                 Finalizar e Pedir pelo WhatsApp
             </button>
         </div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>

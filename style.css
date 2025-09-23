@@ -162,7 +162,6 @@ header p {
     font-weight: 600;
 }
 
-/* NOVO VISUAL - LÓGICA DE APARECER/SUMIR CONTROLES */
 .opcao-quantia {
     border: 2px solid var(--border-color);
     border-radius: 12px;
@@ -170,8 +169,8 @@ header p {
     background-color: var(--white-color);
     display: flex;
     align-items: center;
-    text-align: center; /* Centraliza o nome no estado inicial */
-    justify-content: center; /* Centraliza o nome no estado inicial */
+    text-align: center;
+    justify-content: center;
     min-height: 45px;
     transition: all 0.2s ease-in-out;
     cursor: pointer;
@@ -185,8 +184,8 @@ header p {
 .opcao-quantia.item-selecionado {
     border-color: var(--primary-color);
     background-color: var(--light-green-bg);
-    justify-content: space-between; /* Alinha nome à esquerda e controles à direita */
-    cursor: default; /* Remove o cursor de clique quando já está selecionado */
+    justify-content: space-between;
+    cursor: default;
 }
 
 .nome-opcao {
@@ -196,11 +195,10 @@ header p {
 }
 
 .opcao-quantia.item-selecionado .nome-opcao {
-    text-align: left; /* Alinha o texto do nome à esquerda no estado selecionado */
+    text-align: left;
     flex-grow: 1; 
 }
 
-/* Oculta os controles por padrão */
 .controle-item {
     display: none;
     align-items: center;
@@ -208,7 +206,6 @@ header p {
     flex-shrink: 0; 
 }
 
-/* Mostra os controles quando o item está selecionado */
 .opcao-quantia.item-selecionado .controle-item {
     display: flex;
 }
@@ -271,6 +268,49 @@ header p {
 }
 .opcao-extra.selecionado .preco-extra {
     color: var(--primary-color);
+}
+
+/* NOVOS ESTILOS PARA A SEÇÃO DE SUCOS */
+#lista-sucos .item-produto {
+    display: flex;
+    align-items: center;
+    padding: 15px 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+#lista-sucos .item-produto:last-child {
+    border-bottom: none;
+}
+
+.nome-produto {
+    flex-grow: 1;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.preco-produto {
+    font-size: 1.05em;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-right: 20px;
+}
+
+.btn-adicionar-produto {
+    background-color: var(--primary-color);
+    color: white;
+    font-weight: bold;
+    font-size: 1.5em;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-adicionar-produto:hover {
+    background-color: var(--secondary-color);
+    transform: scale(1.1);
 }
 
 #secao-carrinho {

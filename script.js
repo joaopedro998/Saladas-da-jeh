@@ -37,7 +37,7 @@ const campoEnderecoEl = document.getElementById('campo-endereco');
 const campoTrocoEl = document.getElementById('campo-troco');
 const campoOpcoesCartaoEl = document.getElementById('opcoes-cartao');
 const quantidadeSaladaEl = document.getElementById('quantidade-salada');
-const listaSucosEl = document.getElementById('lista-sucos'); // NOVO: Lista de sucos
+const listaSucosEl = document.getElementById('lista-sucos');
 
 // --- LÓGICA DE SALADAS ---
 
@@ -120,7 +120,7 @@ function atualizarContadorOpcionais() {
     contadorOpcionaisEl.textContent = textoContador;
 }
 
-// --- LÓGICA DO CARRINHO (AGORA UNIFICADA) ---
+// --- LÓGICA DO CARRINHO (UNIFICADA) ---
 
 function adicionarSaladaAoCarrinho() {
     const quantidade = parseInt(quantidadeSaladaEl.value);
@@ -173,7 +173,6 @@ function renderizarCarrinho() {
     carrinho.forEach((item, index) => {
         const li = document.createElement('li');
         let itemHtml = '';
-
         if (item.tipo === 'salada') {
             const opcionaisStr = item.detalhes.opcionais.map(op => op.quantidade > 1 ? `${op.nome} (${op.quantidade}x)` : op.nome).join(', ');
             let extrasStr = item.detalhes.extras.length > 0 ? `<br>Extras: ${item.detalhes.extras.map(e => e.nome).join(', ')}` : '';
@@ -191,15 +190,12 @@ function renderizarCarrinho() {
                     <div class="detalhes-salada">${item.nome}</div>
                 </div>`;
         }
-        
         li.innerHTML = `${itemHtml}<button class="btn-remover" data-index="${index}">X</button>`;
         listaCarrinhoEl.appendChild(li);
     });
-
     document.querySelectorAll('.btn-remover').forEach(btn => {
         btn.addEventListener('click', (e) => removerDoCarrinho(parseInt(e.target.dataset.index)));
     });
-
     atualizarTotalPedido();
 }
 
@@ -215,7 +211,6 @@ function atualizarTotalPedido() {
         }
         return acc + (item.quantidade * precoUnitario);
     }, 0);
-    
     let totalFinal = totalItens;
     if (dadosPedido.metodoEntrega === 'entrega' && carrinho.length > 0) {
         totalFinal += TAXA_ENTREGA;
@@ -223,14 +218,60 @@ function atualizarTotalPedido() {
     totalPedidoEl.innerText = totalFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
 }
 
-// --- LÓGICA DE FINALIZAÇÃO ---
+// --- LÓGICA DE FINALIZAÇÃO (CORRIGIDA) ---
 
-function selecionarMetodoEntrega(elemento) { /* ... (sem alterações) ... */ }
-function selecionarFormaPagamento(elemento) { /* ... (sem alterações) ... */ }
-function selecionarTipoCartao(elemento) { /* ... (sem alterações) ... */ }
+function selecionarMetodoEntrega(elemento) {
+    dadosPedido.metodoEntrega = elemento.dataset.metodo;
+    document.querySelectorAll('#metodo-entrega .opcao').forEach(opt => opt.classList.remove('selecionado'));
+    elemento.classList.add('selecionado');
+    campoEnderecoEl.style.display = (dadosPedido.metodoEntrega === 'retirada') ? 'none' : 'block';
+    atualizarTotalPedido();
+}
+
+function selecionarFormaPagamento(elemento) {
+    dadosPedido.formaPagamento = elemento.dataset.pagamento;
+    document.querySelectorAll('#forma-pagamento .opcao').forEach(opt => opt.classList.remove('selecionado'));
+    elemento.classList.add('selecionado');
+    campoTrocoEl.classList.toggle('hidden', dadosPedido.formaPagamento !== 'Dinheiro');
+    campoOpcoesCartaoEl.classList.toggle('hidden', dadosPedido.formaPagamento !== 'Cartão');
+    if (dadosPedido.formaPagamento !== 'Cartão') {
+        dadosPedido.tipoCartao = null;
+        document.querySelectorAll('#tipo-cartao .opcao').forEach(opt => opt.classList.remove('selecionado'));
+    }
+}
+
+function selecionarTipoCartao(elemento) {
+    dadosPedido.tipoCartao = elemento.dataset.tipo;
+    document.querySelectorAll('#tipo-cartao .opcao').forEach(opt => opt.classList.remove('selecionado'));
+    elemento.classList.add('selecionado');
+}
 
 function enviarPedido() {
-    // ... (Validações permanecem as mesmas) ...
+    const nomeCliente = document.getElementById('nome-cliente').value.trim();
+    const enderecoCliente = document.getElementById('endereco-cliente').value.trim();
+    mensagemErroEl.style.display = 'none';
+
+    if (carrinho.length === 0) return;
+    if (!dadosPedido.formaPagamento) {
+        mensagemErroEl.innerText = 'Por favor, escolha uma forma de pagamento.';
+        mensagemErroEl.style.display = 'block';
+        return;
+    }
+    if (dadosPedido.formaPagamento === 'Cartão' && !dadosPedido.tipoCartao) {
+        mensagemErroEl.innerText = 'Por favor, escolha Crédito ou Débito.';
+        mensagemErroEl.style.display = 'block';
+        return;
+    }
+    if (nomeCliente === '') {
+        mensagemErroEl.innerText = 'Por favor, preencha seu nome.';
+        mensagemErroEl.style.display = 'block';
+        return;
+    }
+    if (dadosPedido.metodoEntrega === 'entrega' && enderecoCliente === '') {
+        mensagemErroEl.innerText = 'Por favor, preencha seu endereço.';
+        mensagemErroEl.style.display = 'block';
+        return;
+    }
 
     let mensagem = `Olá, *Salada da Jeh*! 🥗\n\nGostaria de fazer um novo pedido:\n\n`;
     let totalItens = 0;
@@ -256,24 +297,57 @@ function enviarPedido() {
         totalItens += item.quantidade * precoUnitario;
     });
 
-    // ... (Restante da montagem da mensagem e envio, igual à versão anterior) ...
+    mensagem += `----------------------\n`;
+    mensagem += `*Cliente:* ${nomeCliente}\n`;
+    mensagem += `*Método:* ${dadosPedido.metodoEntrega === 'entrega' ? `Entrega 🛵\n*Endereço:* ${enderecoCliente}` : 'Retirada no local 🛍️'}\n`;
+    let pagamentoStr = dadosPedido.formaPagamento;
+    if (pagamentoStr === 'Cartão') {
+        pagamentoStr += ` (${dadosPedido.tipoCartao})`;
+    }
+    mensagem += `*Pagamento:* ${pagamentoStr}\n`;
+    const troco = document.getElementById('troco').value.trim();
+    if (dadosPedido.formaPagamento === 'Dinheiro' && troco) {
+        mensagem += `*Troco para:* R$ ${troco}\n`;
+    }
+    const observacoes = document.getElementById('observacoes').value.trim();
+    if (observacoes) {
+        mensagem += `\n*Observações:* ${observacoes}\n`;
+    }
+    let totalFinal = totalItens;
+    if (dadosPedido.metodoEntrega === 'entrega') totalFinal += TAXA_ENTREGA;
+    mensagem += `----------------------\n*TOTAL:* ${totalFinal.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}\n\n`;
+    mensagem += `Aguardo a confirmação do meu pedido. Obrigado!`;
+
+    const linkWhatsApp = `https://wa.me/${NUMERO_WHATSAPP}?text=${encodeURIComponent(mensagem)}`;
+    window.open(linkWhatsApp, '_blank');
 }
 
-function verificarStatusLoja() { /* ... (sem alterações) ... */ }
+function verificarStatusLoja() {
+    const agora = new Date();
+    const horaAtual = agora.getHours();
+    const lojaAberta = horaAtual >= HORA_ABERTURA && horaAtual < HORA_FECHAMENTO;
+    if (lojaAberta) {
+        statusLojaEl.textContent = 'Aberto para pedidos!';
+        statusLojaEl.className = 'aberto';
+    } else {
+        statusLojaEl.textContent = `Fechado (Aberto das ${HORA_ABERTURA}:00 às ${HORA_FECHAMENTO}:00)`;
+        statusLojaEl.className = 'fechado';
+        btnFinalizar.disabled = true;
+        btnAdicionarCarrinho.disabled = true;
+    }
+}
 
 // --- INICIALIZAÇÃO E EVENTOS ---
 document.addEventListener('DOMContentLoaded', () => {
     verificarStatusLoja();
     resetarSelecaoAtual();
 
-    // Eventos de salada
     document.querySelectorAll('#bases .opcao').forEach(el => el.addEventListener('click', () => selecionarOpcaoUnica('base', el)));
     document.querySelectorAll('#proteinas .opcao').forEach(el => el.addEventListener('click', () => selecionarOpcaoUnica('proteina', el)));
     document.querySelectorAll('#molhos .opcao').forEach(el => el.addEventListener('click', () => selecionarOpcaoUnica('molho', el)));
     document.querySelectorAll('#extras .opcao-extra').forEach(el => el.addEventListener('click', () => selecionarExtra(el)));
     btnAdicionarCarrinho.addEventListener('click', adicionarSaladaAoCarrinho);
 
-    // Evento dos opcionais de salada
     gridOpcionaisEl.addEventListener('click', (e) => {
         const opcionalEl = e.target.closest('.opcao-quantia');
         if (!opcionalEl) return;
@@ -290,7 +364,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // NOVO: Evento para adicionar sucos
     listaSucosEl.addEventListener('click', (e) => {
         if (e.target.classList.contains('btn-adicionar-produto')) {
             const itemEl = e.target.closest('.item-produto');
@@ -300,7 +373,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     
-    // Eventos de finalização
     document.querySelectorAll('#metodo-entrega .opcao').forEach(el => el.addEventListener('click', () => selecionarMetodoEntrega(el)));
     document.querySelectorAll('#forma-pagamento .opcao').forEach(el => el.addEventListener('click', () => selecionarFormaPagamento(el)));
     document.querySelectorAll('#tipo-cartao .opcao').forEach(el => el.addEventListener('click', () => selecionarTipoCartao(el)));
